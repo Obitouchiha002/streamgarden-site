@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>StreamGarden — Android video &amp; audio downloader</title>
+<meta name="description" content="Download video and audio on Android. YouTube extraction runs entirely on your phone — every quality, real MP3 with cover art, and a built-in offline music player. Free, open source, no ads." />
+<meta name="theme-color" content="#0B0D08" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="StreamGarden — Android video &amp; audio downloader" />
+<meta property="og:description" content="Every quality, real MP3 with cover art, and an offline music player. Runs entirely on your phone. Free and open source." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<!-- Marks that scripting is available, so the reveal animation can hide content. Without
+     this class nothing is ever hidden, and the page reads fine with JS off or broken. -->
+<script>document.documentElement.classList.add('js');</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23AEC98A'/%3E%3Cpath d='M16 7v12m-5-5 5 5 5-5M9 25h14' stroke='%23101408' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <span class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#101408" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+        </svg>
+      </span>
+      StreamGarden
+    </a>
+    <nav>
+      <a class="hide-sm" href="#features">Features</a>
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#specs">Under the hood</a>
+      <a class="hide-sm" href="#faq">FAQ</a>
+      <a class="btn btn-primary btn-sm" href="StreamGarden.apk" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+        </svg>
+        Download
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ───────────────────────── hero ───────────────────────── -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Android · Free · Open source</span>
+        <h1>Save any video.<br />Keep the <span class="accent">whole quality.</span></h1>
+        <p class="lede">
+          Most downloaders hand you 360p and a watermark. StreamGarden pulls the real streams
+          — up to 4K — straight from your phone, merges them without re-encoding, and can turn
+          any track into a proper MP3 with its cover art attached.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="StreamGarden.apk" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+            </svg>
+            Download for Android
+          </a>
+          <a class="btn btn-ghost" href="#install">How to install</a>
+        </div>
+
+        <div class="meta-row">
+          <span><i class="dot"></i> v1.7 · 8.3 MB</span>
+          <span><i class="dot"></i> Android 6.0+</span>
+          <span><i class="dot"></i> No ads, no tracking</span>
+        </div>
+      </div>
+
+      <!-- A live sketch of what actually happens when you tap download: two separate
+           streams come down in parallel, then get muxed into one file. -->
+      <div class="viz" id="viz" aria-hidden="true">
+        <div class="viz-head">
+          <span class="viz-title">Downloading</span>
+          <span class="viz-chip">1080p · on device</span>
+        </div>
+
+        <div class="track">
+          <div class="track-label"><span>Video stream</span><b data-pct="v">0%</b></div>
+          <div class="bar"><i data-bar="v"></i></div>
+        </div>
+        <div class="track">
+          <div class="track-label"><span>Audio stream</span><b data-pct="a">0%</b></div>
+          <div class="bar"><i data-bar="a"></i></div>
+        </div>
+
+        <div class="merge">
+          <span class="rule"></span>
+          <span id="mergeText">merging — no re-encode</span>
+          <span class="rule"></span>
+        </div>
+
+        <div class="result" id="result">
+          <span class="ic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </span>
+          <span>
+            <span class="nm">Saved to Downloads</span>
+            <span class="sb">one file · full quality</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- ───────────────────────── features ───────────────────────── -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">What you get</span>
+        <h2>Built like a real app, not a wrapper.</h2>
+        <p>Everything runs on the phone. There's no queue to wait in, no account to make, and nothing to pay for.</p>
+      </div>
+
+      <div class="grid g3">
+        <article class="card lit rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="m17 12 5-3v6l-5-3Z"/></svg></span>
+          <h3>Every quality, not just 360p</h3>
+          <p>720p, 1080p and above arrive as separate video and audio streams. The app fetches both and merges them with Android's own muxer — a stream copy, so nothing is re-encoded and nothing is lost.</p>
+        </article>
+
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+          <h3>Real MP3, with the cover art</h3>
+          <p>No site actually serves MP3. StreamGarden decodes the audio and re-encodes it on your phone with a built-in LAME encoder, then writes the title, artist and thumbnail into the file.</p>
+        </article>
+
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg></span>
+          <h3>Downloads at full speed</h3>
+          <p>Servers throttle a single connection after its first burst. Each file comes down as several ranged chunks at once, so a long video finishes in a fraction of the time.</p>
+        </article>
+
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18l-2 5H5l-2-5Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <h3>An offline music player inside</h3>
+          <p>Every song on your phone, in one place — playlists, favourites, swipe gestures, and playback that keeps going with the screen off, complete with lock-screen and headset controls.</p>
+        </article>
+
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg></span>
+          <h3>Share a link straight to it</h3>
+          <p>Tap Share anywhere — YouTube, Instagram, your browser — and pick StreamGarden. It starts working the moment it opens. Copy a link instead and it offers to fetch that too.</p>
+        </article>
+
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg></span>
+          <h3>Whole playlists, your pick</h3>
+          <p>Paste a playlist and every video shows up with a checkbox. Tick the ones you actually want — nothing downloads until you say so.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── how ───────────────────────── -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">How it works</span>
+        <h2>Three taps, start to finish.</h2>
+      </div>
+
+      <div class="steps rise">
+        <div class="step">
+          <span class="step-n">STEP 01</span>
+          <div>
+            <h3>Give it a link — or just a song name</h3>
+            <p>Paste a URL, share one into the app, or type what you're looking for and search YouTube, Dailymotion and Archive.org together.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">STEP 02</span>
+          <div>
+            <h3>Pick your quality</h3>
+            <p>Every resolution and audio format the source offers, with file sizes. Changed your mind mid-download? Tap another one and it switches.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-n">STEP 03</span>
+          <div>
+            <h3>It lands in Downloads</h3>
+            <p>Saved to <b style="color:var(--text)">Downloads/StreamGarden</b>, ready for any player or to send on. A notification tells you the moment it's done.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── install ───────────────────────── -->
+  <section id="install">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">Installing</span>
+        <h2>It's an APK, so there's one extra step.</h2>
+        <p>StreamGarden isn't on the Play Store, so Android asks your permission before installing it. This is normal for apps installed outside the store.</p>
+      </div>
+
+      <div class="grid g2">
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+          <h3>1 · Download the file</h3>
+          <p>Tap the download button. Chrome may warn that this type of file can harm your device — that warning appears for every APK. Choose <b style="color:var(--text)">Download anyway</b>.</p>
+        </article>
+        <article class="card rise">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M11 18h2"/></svg></span>
+          <h3>2 · Open it and allow</h3>
+          <p>Tap the downloaded file. If Android says installs from this source are blocked, tap <b style="color:var(--text)">Settings</b>, turn the permission on, and go back. Then tap Install.</p>
+        </article>
+      </div>
+
+      <p class="legal rise">
+        Nervous about that warning? Fair. The app is open source — you can read every line, or
+        build it yourself and install your own copy. It asks for no camera, microphone, location
+        or contacts permission, because it never needs them.
+      </p>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── specs ───────────────────────── -->
+  <section id="specs">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">Under the hood</span>
+        <h2>For anyone who wants to know how.</h2>
+        <p>The interesting part isn't the interface — it's that all of this happens on a phone, with no server in the middle.</p>
+      </div>
+
+      <dl class="specs rise">
+        <div class="spec">
+          <dt>Extraction</dt>
+          <dd>Runs on the device with NewPipeExtractor and an embedded JavaScript engine that executes the site's own player code to solve the stream cipher. <span>Your phone's IP does the talking, so it isn't blocked the way hosted downloaders are.</span></dd>
+        </div>
+        <div class="spec">
+          <dt>Merging</dt>
+          <dd>Android <span>MediaMuxer</span>, stream copy only — no re-encode, no generation loss.</dd>
+        </div>
+        <div class="spec">
+          <dt>MP3</dt>
+          <dd>Decoded with MediaCodec, re-encoded by a bundled LAME, tagged with ID3v2 <span>(title, artist, cover art)</span>.</dd>
+        </div>
+        <div class="spec">
+          <dt>Transfer</dt>
+          <dd>Parallel ranged chunks over OkHttp, with resume, cancel and live progress.</dd>
+        </div>
+        <div class="spec">
+          <dt>Music player</dt>
+          <dd>A foreground service with MediaSession — background playback, notification, lock-screen, headset and Bluetooth controls.</dd>
+        </div>
+        <div class="spec">
+          <dt>Instagram &amp; Facebook</dt>
+          <dd>Resolved through a <span>Cobalt</span> instance. Public ones are built in; point it at your own for reliability.</dd>
+        </div>
+        <div class="spec">
+          <dt>Built with</dt>
+          <dd>Capacitor 6 · React 19 · TypeScript · a custom native Java plugin</dd>
+        </div>
+        <div class="spec">
+          <dt>Licence</dt>
+          <dd>GPL-3.0 — free to use, read, change and share.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── download band ───────────────────────── -->
+  <section>
+    <div class="wrap">
+      <div class="band rise">
+        <span class="eyebrow" style="justify-content:center">Ready when you are</span>
+        <h2 style="margin-top:16px">Get StreamGarden</h2>
+        <p class="lede" style="text-align:center">
+          One file, 8.3 MB. No account, no subscription, no ads — and nothing to uninstall later
+          if you decide it isn't for you.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="StreamGarden.apk" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+            </svg>
+            Download v1.7 · APK
+          </a>
+        </div>
+        <div class="meta-row" style="justify-content:center">
+          <span><i class="dot"></i> Android 6.0 and newer</span>
+          <span><i class="dot"></i> Signed release build</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── faq ───────────────────────── -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head rise">
+        <span class="eyebrow">Questions</span>
+        <h2>Straight answers.</h2>
+      </div>
+
+      <div class="rise">
+        <details>
+          <summary>Why isn't it on the Play Store?</summary>
+          <p>Google's Device and Network Abuse policy doesn't allow apps that download content from platforms like YouTube. That's why NewPipe, Seal and every similar app are distributed the same way — as an APK, outside the store.</p>
+        </details>
+        <details>
+          <summary>Is it safe to install?</summary>
+          <p>The full source is public, so nothing is hidden. It requests no camera, microphone, location or contacts access — check the permission list yourself before installing. The only network calls it makes are to the site you're downloading from.</p>
+        </details>
+        <details>
+          <summary>Does it collect my data?</summary>
+          <p>No accounts, no analytics, no ads. The app registers a device identifier so the developer can push update notices and, if ever needed, disable a build — nothing about you, your files or your activity is collected.</p>
+        </details>
+        <details>
+          <summary>Where do my files go?</summary>
+          <p>Into <b style="color:var(--text)">Downloads/StreamGarden</b> on your phone's own storage — visible to every file manager, gallery and music player. They're ordinary files; the app doesn't lock them in.</p>
+        </details>
+        <details>
+          <summary>How do updates work?</summary>
+          <p>Come back here and install the newer APK over your current one — nothing is lost. The app also shows a notice inside when a new version is out.</p>
+        </details>
+        <details>
+          <summary>Instagram or Facebook isn't downloading. Why?</summary>
+          <p>Those platforms have no public API, so they're resolved through a shared Cobalt server that can be busy or rate-limited. Running your own takes about ten minutes and makes them reliable — the setup guide is in the repository.</p>
+        </details>
+        <details>
+          <summary>Can I download things I don't own the rights to?</summary>
+          <p>The app is a tool, and it doesn't decide that for you. Downloading copyrighted material can breach a platform's terms and your local law. Use it for your own content, for licensed and public-domain material, and for things you're allowed to keep offline.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#101408" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
+          </svg>
+        </span>
+        StreamGarden
+      </a>
+      <p style="margin-top:10px">Made by <b style="color:var(--text)">Vansh Kashyap</b> · GPL-3.0</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="StreamGarden.apk" download>Download APK</a>
+  </div>
+  <div class="wrap">
+    <p class="legal">
+      StreamGarden hosts no content and circumvents no copy protection — it reads the same
+      public streams your browser does. You are responsible for what you download and for
+      respecting the rights of the people who made it.
+    </p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
