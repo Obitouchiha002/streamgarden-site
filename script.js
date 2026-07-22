@@ -1,38 +1,91 @@
-// Two small behaviours: reveal sections as they scroll in, and run the hero's
-// download animation so the page shows what the app does instead of describing it.
+// Three behaviours: the download card, the mobile panel switching, and the small
+// touches that make the page feel alive (reveals + the hero download animation).
 
-// ── sticky header hairline ──────────────────────────────────────────
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = () => matchMedia('(max-width: 820px)').matches;
+
+/* ── download card ─────────────────────────────────────────────── */
+const bg = document.getElementById('dlBg');
+const openCard = () => {
+  bg.hidden = false;
+  document.body.style.overflow = 'hidden';
+  bg.querySelector('.dl-go').focus({ preventScroll: true });
+};
+const closeCard = () => {
+  bg.hidden = true;
+  if (!isMobile()) document.body.style.overflow = '';
+};
+
+document.querySelectorAll('[data-download]').forEach((el) =>
+  el.addEventListener('click', (e) => { e.preventDefault(); openCard(); })
+);
+document.getElementById('dlClose').addEventListener('click', closeCard);
+bg.addEventListener('click', (e) => { if (e.target === bg) closeCard(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && !bg.hidden) closeCard(); });
+// Let the download start, then get out of the way.
+bg.querySelector('.dl-go').addEventListener('click', () => setTimeout(closeCard, 600));
+
+/* ── mobile panels ─────────────────────────────────────────────── */
+const panels = [...document.querySelectorAll('.panel')];
+const tabs = [...document.querySelectorAll('.tab[data-go]')];
+
+function show(id) {
+  const panel = document.getElementById(id);
+  if (!panel) return;
+
+  if (isMobile()) {
+    panels.forEach((p) => p.classList.toggle('active', p === panel));
+    panel.scrollTop = 0;
+    // Reveals inside a freshly shown panel would never intersect; just show them.
+    panel.querySelectorAll('.rise').forEach((el) => el.classList.add('in'));
+  } else {
+    panel.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+  }
+  tabs.forEach((t) => t.classList.toggle('active', t.dataset.go === id));
+}
+
+document.querySelectorAll('[data-go]').forEach((el) =>
+  el.addEventListener('click', (e) => { e.preventDefault(); show(el.dataset.go); })
+);
+
+// Coming back to a wide window must not leave panels hidden.
+const syncLayout = () => {
+  if (isMobile()) {
+    if (!panels.some((p) => p.classList.contains('active'))) panels[0].classList.add('active');
+    document.body.style.overflow = 'hidden';
+  } else {
+    panels.forEach((p) => p.classList.remove('active'));
+    document.body.style.overflow = '';
+  }
+};
+syncLayout();
+addEventListener('resize', syncLayout);
+
+/* ── header hairline (desktop scroll) ──────────────────────────── */
 const hdr = document.getElementById('hdr');
-const onScroll = () => hdr.classList.toggle('stuck', window.scrollY > 8);
+const onScroll = () => hdr.classList.toggle('stuck', scrollY > 8);
 onScroll();
 addEventListener('scroll', onScroll, { passive: true });
 
-// ── scroll reveal ───────────────────────────────────────────────────
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ── reveal on scroll ──────────────────────────────────────────── */
 const rises = document.querySelectorAll('.rise');
-
 if (reduced || !('IntersectionObserver' in window)) {
   rises.forEach((el) => el.classList.add('in'));
 } else {
   const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((e, i) => {
-        if (!e.isIntersecting) return;
-        // Stagger siblings slightly so a grid doesn't pop in as one block.
-        setTimeout(() => e.target.classList.add('in'), i * 70);
-        io.unobserve(e.target);
-      });
-    },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.12 }
+    (entries) => entries.forEach((e, i) => {
+      if (!e.isIntersecting) return;
+      setTimeout(() => e.target.classList.add('in'), i * 60);
+      io.unobserve(e.target);
+    }),
+    { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
   );
   rises.forEach((el) => io.observe(el));
-
-  // Safety net: if the observer never fires (odd in-app browsers, restored tabs), show
-  // everything anyway rather than leaving the page blank.
+  // Safety net — never leave the page blank if the observer misbehaves.
   setTimeout(() => rises.forEach((el) => el.classList.add('in')), 2500);
 }
 
-// ── hero: video + audio download, then merge ────────────────────────
+/* ── hero: two streams down, then merged ───────────────────────── */
 const viz = document.getElementById('viz');
 if (viz && !reduced) {
   const bars = { v: viz.querySelector('[data-bar="v"]'), a: viz.querySelector('[data-bar="a"]') };
@@ -40,21 +93,16 @@ if (viz && !reduced) {
   const mergeText = document.getElementById('mergeText');
   const result = document.getElementById('result');
 
-  const set = (k, n) => {
-    bars[k].style.width = n + '%';
-    pcts[k].textContent = Math.round(n) + '%';
-  };
-
+  const set = (k, n) => { bars[k].style.width = n + '%'; pcts[k].textContent = Math.round(n) + '%'; };
   let timer = null;
   const wait = (ms) => new Promise((r) => { timer = setTimeout(r, ms); });
 
   async function run() {
-    // reset
     set('v', 0); set('a', 0);
     result.classList.remove('on');
     mergeText.textContent = 'waiting for both streams';
 
-    // The audio track is much smaller, so it finishes first — same as the real thing.
+    // Audio is the smaller file, so it finishes first — same as the real download.
     let v = 0, a = 0;
     while (v < 100 || a < 100) {
       v = Math.min(100, v + 1.6 + Math.random() * 2.2);
@@ -62,7 +110,6 @@ if (viz && !reduced) {
       set('v', v); set('a', a);
       await wait(46);
     }
-
     mergeText.textContent = 'merging — no re-encode';
     await wait(700);
     result.classList.add('on');
@@ -71,12 +118,8 @@ if (viz && !reduced) {
     run();
   }
 
-  // Only animate while the hero is actually on screen.
-  const vio = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) run();
-      else if (timer) { clearTimeout(timer); timer = null; }
-    });
-  }, { threshold: 0.25 });
-  vio.observe(viz);
+  new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) run();
+    else if (timer) { clearTimeout(timer); timer = null; }
+  }), { threshold: 0.25 }).observe(viz);
 }
