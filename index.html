@@ -389,10 +389,14 @@
         <li>Subtitles, MKV, WAV, FLAC and more</li>
         <li>Copy a link and it offers to fetch it, instantly</li>
       </ul>
-      <a class="btn btn-primary btn-lg dl-go" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest"
-         target="_blank" rel="noopener">
+      <!-- Points straight at the release asset. GitHub serves those with a download
+           disposition, so the file starts saving immediately — no page in between. The
+           filename is fixed, so this link survives every new version. -->
+      <a class="btn btn-primary btn-lg dl-go"
+         href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest/download/StreamGarden-Setup.exe"
+         download>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-        Get the Windows installer
+        Download for Windows
       </a>
       <p class="dl-note">
         yt-dlp and ffmpeg ship inside — nothing else to install. GPL-3.0 · Windows may show a
