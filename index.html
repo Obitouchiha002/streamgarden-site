@@ -342,26 +342,63 @@
     </div>
 
     <h3 id="dlName">StreamGarden</h3>
-    <p class="dl-sub">Video &amp; audio downloader for Android</p>
+    <p class="dl-sub">Video &amp; audio downloader</p>
 
-    <div class="dl-stats">
-      <div><b>2.1</b><span>Version</span></div>
-      <div><b>8.3 MB</b><span>Size</span></div>
-      <div><b>6.0+</b><span>Android</span></div>
+    <!-- Pick a platform; the panels below swap. -->
+    <div class="plat-switch" role="tablist" aria-label="Platform">
+      <button class="ps on" id="psAndroid" role="tab" aria-selected="true" aria-controls="panAndroid">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.7-.4l-1.87 3.23a11.4 11.4 0 0 0-9.74 0L5.26 5.9a.4.4 0 1 0-.7.4L6.4 9.48A10.7 10.7 0 0 0 1 18h22a10.7 10.7 0 0 0-5.4-8.52ZM7 15.25a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm10 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg>
+        Android
+      </button>
+      <button class="ps" id="psWindows" role="tab" aria-selected="false" aria-controls="panWindows">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.2 4.5v7.1H3V5.5Zm0 13L10.2 19.5v-7H3v6ZM11.3 4.35 21 3v8.6h-9.7V4.35Zm0 15.3L21 21v-8.5h-9.7v7.15Z"/></svg>
+        Windows
+      </button>
     </div>
 
-    <ul class="dl-list">
-      <li>Up to 4K, merged without re-encoding</li>
-      <li>MP3 with cover art and tags</li>
-      <li>Offline music player built in</li>
-      <li>No ads, no account, no tracking</li>
-    </ul>
+    <!-- Android -->
+    <div id="panAndroid" class="dl-pan">
+      <div class="dl-stats">
+        <div><b>2.1</b><span>Version</span></div>
+        <div><b>8.3 MB</b><span>Size</span></div>
+        <div><b>6.0+</b><span>Android</span></div>
+      </div>
+      <ul class="dl-list">
+        <li>Up to 4K, merged without re-encoding</li>
+        <li>MP3 with cover art and tags</li>
+        <li>Offline music player built in</li>
+        <li>No ads, no account, no tracking</li>
+      </ul>
+      <a class="btn btn-primary btn-lg dl-go" href="StreamGarden.apk" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Download APK
+      </a>
+      <p class="dl-note">Signed release build · GPL-3.0 · Chrome may warn about APK files — that's normal, choose “Download anyway”.</p>
+    </div>
 
-    <a class="btn btn-primary btn-lg dl-go" href="StreamGarden.apk" download>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-      Download APK
-    </a>
-    <p class="dl-note">Signed release build · GPL-3.0 · Chrome may warn about APK files — that's normal, choose “Download anyway”.</p>
+    <!-- Windows -->
+    <div id="panWindows" class="dl-pan" hidden>
+      <div class="dl-stats">
+        <div><b>1.0</b><span>Version</span></div>
+        <div><b>Installer</b><span>Setup .exe</span></div>
+        <div><b>10 / 11</b><span>Windows</span></div>
+      </div>
+      <ul class="dl-list">
+        <li>Download queue — several at once, pause and resume</li>
+        <li>Trim to a section before saving</li>
+        <li>Subtitles, MKV, WAV, FLAC and more</li>
+        <li>Copy a link and it offers to fetch it, instantly</li>
+      </ul>
+      <a class="btn btn-primary btn-lg dl-go" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest"
+         target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Get the Windows installer
+      </a>
+      <p class="dl-note">
+        yt-dlp and ffmpeg ship inside — nothing else to install. GPL-3.0 · Windows may show a
+        “Windows protected your PC” notice for unsigned apps; choose <b>More info → Run anyway</b>.
+      </p>
+    </div>
   </div>
 </div>
 

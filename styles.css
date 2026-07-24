@@ -275,6 +275,21 @@ footer { border-top: 1px solid var(--line); padding: 50px 0 60px; }
 .dl-card h3 { font-size: 1.5rem; }
 .dl-sub { font-size: .88rem; margin-top: 5px; }
 
+/* Platform switch inside the download card. */
+.plat-switch {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  background: var(--ink); border: 1px solid var(--line); border-radius: 12px;
+  padding: 4px; margin-top: 18px;
+}
+.ps {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 10px; border-radius: 9px; font-size: .86rem; font-weight: 600;
+  color: var(--muted); transition: background .18s, color .18s;
+}
+.ps svg { width: 15px; height: 15px; flex: none; }
+.ps:hover { color: var(--text); }
+.ps.on { background: var(--sage); color: #101408; }
+
 .dl-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
 .dl-stats div { border: 1px solid var(--line); border-radius: 13px; padding: 11px 6px; background: var(--ink); }
 .dl-stats b { display: block; font-family: var(--display); font-size: 1.02rem; letter-spacing: -.02em; }

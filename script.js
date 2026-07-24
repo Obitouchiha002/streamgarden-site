@@ -20,6 +20,30 @@ document.querySelectorAll('[data-download]').forEach((el) =>
   el.addEventListener('click', (e) => { e.preventDefault(); openCard(); })
 );
 document.getElementById('dlClose').addEventListener('click', closeCard);
+
+/* Platform switch — defaults to whichever OS the visitor is on. */
+const psA = document.getElementById('psAndroid');
+const psW = document.getElementById('psWindows');
+const panA = document.getElementById('panAndroid');
+const panW = document.getElementById('panWindows');
+
+function showPlatform(which) {
+  const android = which === 'android';
+  psA.classList.toggle('on', android);
+  psW.classList.toggle('on', !android);
+  psA.setAttribute('aria-selected', String(android));
+  psW.setAttribute('aria-selected', String(!android));
+  panA.hidden = !android;
+  panW.hidden = android;
+}
+
+psA.addEventListener('click', () => showPlatform('android'));
+psW.addEventListener('click', () => showPlatform('windows'));
+
+// A visitor on a desktop almost certainly wants the installer, not an APK.
+showPlatform(/Android/i.test(navigator.userAgent) ? 'android'
+  : /Windows/i.test(navigator.userAgent) ? 'windows'
+  : /Mobile|iPhone|iPad/i.test(navigator.userAgent) ? 'android' : 'windows');
 bg.addEventListener('click', (e) => { if (e.target === bg) closeCard(); });
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !bg.hidden) closeCard(); });
 // Let the download start, then get out of the way.
