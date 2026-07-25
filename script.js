@@ -23,22 +23,22 @@ document.getElementById('dlClose').addEventListener('click', closeCard);
 
 /* Platform switch — defaults to whichever OS the visitor is on. */
 const PLATFORMS = ['android', 'windows', 'mac'];
-const tabs = { android: 'psAndroid', windows: 'psWindows', mac: 'psMac' };
-const pans = { android: 'panAndroid', windows: 'panWindows', mac: 'panMac' };
+const psTabs = { android: 'psAndroid', windows: 'psWindows', mac: 'psMac' };
+const psPans = { android: 'panAndroid', windows: 'panWindows', mac: 'panMac' };
 
 function showPlatform(which) {
   if (!PLATFORMS.includes(which)) which = 'windows';
   for (const p of PLATFORMS) {
     const on = p === which;
-    const tab = document.getElementById(tabs[p]);
-    const pan = document.getElementById(pans[p]);
+    const tab = document.getElementById(psTabs[p]);
+    const pan = document.getElementById(psPans[p]);
     if (tab) { tab.classList.toggle('on', on); tab.setAttribute('aria-selected', String(on)); }
     if (pan) pan.hidden = !on;
   }
 }
 
 for (const p of PLATFORMS) {
-  document.getElementById(tabs[p])?.addEventListener('click', () => showPlatform(p));
+  document.getElementById(psTabs[p])?.addEventListener('click', () => showPlatform(p));
 }
 
 // A visitor on a desktop almost certainly wants the desktop build, not an APK. Detect Mac
