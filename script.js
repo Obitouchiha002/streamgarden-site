@@ -22,32 +22,36 @@ document.querySelectorAll('[data-download]').forEach((el) =>
 document.getElementById('dlClose').addEventListener('click', closeCard);
 
 /* Platform switch — defaults to whichever OS the visitor is on. */
-const psA = document.getElementById('psAndroid');
-const psW = document.getElementById('psWindows');
-const panA = document.getElementById('panAndroid');
-const panW = document.getElementById('panWindows');
+const PLATFORMS = ['android', 'windows', 'mac'];
+const tabs = { android: 'psAndroid', windows: 'psWindows', mac: 'psMac' };
+const pans = { android: 'panAndroid', windows: 'panWindows', mac: 'panMac' };
 
 function showPlatform(which) {
-  const android = which === 'android';
-  psA.classList.toggle('on', android);
-  psW.classList.toggle('on', !android);
-  psA.setAttribute('aria-selected', String(android));
-  psW.setAttribute('aria-selected', String(!android));
-  panA.hidden = !android;
-  panW.hidden = android;
+  if (!PLATFORMS.includes(which)) which = 'windows';
+  for (const p of PLATFORMS) {
+    const on = p === which;
+    const tab = document.getElementById(tabs[p]);
+    const pan = document.getElementById(pans[p]);
+    if (tab) { tab.classList.toggle('on', on); tab.setAttribute('aria-selected', String(on)); }
+    if (pan) pan.hidden = !on;
+  }
 }
 
-psA.addEventListener('click', () => showPlatform('android'));
-psW.addEventListener('click', () => showPlatform('windows'));
+for (const p of PLATFORMS) {
+  document.getElementById(tabs[p])?.addEventListener('click', () => showPlatform(p));
+}
 
-// A visitor on a desktop almost certainly wants the installer, not an APK.
-showPlatform(/Android/i.test(navigator.userAgent) ? 'android'
-  : /Windows/i.test(navigator.userAgent) ? 'windows'
-  : /Mobile|iPhone|iPad/i.test(navigator.userAgent) ? 'android' : 'windows');
+// A visitor on a desktop almost certainly wants the desktop build, not an APK. Detect Mac
+// before Windows, and treat iPhone/iPad as Android (the closest downloadable build).
+const ua = navigator.userAgent;
+showPlatform(/Android/i.test(ua) ? 'android'
+  : /Mac/i.test(ua) && !/iPhone|iPad|iPod/i.test(ua) ? 'mac'
+  : /Windows/i.test(ua) ? 'windows'
+  : /Mobile|iPhone|iPad/i.test(ua) ? 'android' : 'windows');
 bg.addEventListener('click', (e) => { if (e.target === bg) closeCard(); });
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !bg.hidden) closeCard(); });
-// Let the download start, then get out of the way.
-bg.querySelector('.dl-go').addEventListener('click', () => setTimeout(closeCard, 600));
+// Let the download start, then get out of the way. (Any download button in the card.)
+bg.querySelectorAll('.dl-go').forEach((b) => b.addEventListener('click', () => setTimeout(closeCard, 600)));
 
 /* ── mobile panels ─────────────────────────────────────────────── */
 const panels = [...document.querySelectorAll('.panel')];

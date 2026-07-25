@@ -277,7 +277,7 @@ footer { border-top: 1px solid var(--line); padding: 50px 0 60px; }
 
 /* Platform switch inside the download card. */
 .plat-switch {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
   background: var(--ink); border: 1px solid var(--line); border-radius: 12px;
   padding: 4px; margin-top: 18px;
 }
@@ -301,6 +301,7 @@ footer { border-top: 1px solid var(--line); padding: 50px 0 60px; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23AEC98A' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
   background-size: 10px; background-repeat: no-repeat; background-position: center; }
 .dl-go { width: 100%; }
+.mac-dl { display: flex; flex-direction: column; gap: 8px; }
 .dl-note { font-size: .72rem; color: var(--dim); margin-top: 13px; line-height: 1.6; }
 
 /* ── reveal ───────────────────────────────────────────────────────── */
