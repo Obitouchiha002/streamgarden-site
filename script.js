@@ -3,7 +3,7 @@
 // ── Premium contact ──────────────────────────────────────────────────────
 // Set this to the owner's WhatsApp number (country code, digits only, no + or spaces),
 // e.g. '919876543210'. Until it's a real number the button explains it's coming soon.
-const WA_NUMBER = '';
+const WA_NUMBER = '918800628376';
 const WA_TEXT = "Hi! I'd like StreamGarden Premium (₹99 lifetime). My Device ID is: ";
 
 (function wireWhatsApp() {

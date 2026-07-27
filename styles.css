@@ -140,6 +140,20 @@ b { color: var(--text); font-weight: 600; }
 .shots img { width: 100%; border-radius: 20px; border: 1px solid var(--line-2); background: var(--surface); }
 .shots figcaption { margin-top: 12px; text-align: center; font-size: .84rem; color: var(--muted); }
 
+.shots-label { text-align: center; font-size: .9rem; color: var(--dim); margin-bottom: 18px; }
+.shots-label span { color: var(--sage); font-weight: 600; }
+
+/* desktop showcase — a window frame around the app screenshot */
+.desktop-show { max-width: 860px; margin: 0 auto; }
+.dsk-frame { border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; background: #0F1109;
+  box-shadow: 0 30px 80px -40px rgba(0,0,0,.9), 0 0 0 1px rgba(174,201,138,.05); }
+.dsk-bar { height: 34px; display: flex; align-items: center; gap: 8px; padding: 0 14px;
+  background: linear-gradient(180deg, #1a2014, #141911); border-bottom: 1px solid var(--line); }
+.dsk-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line-2); }
+.dsk-bar i:nth-child(1) { background: #E5806E; } .dsk-bar i:nth-child(2) { background: #E8C15A; } .dsk-bar i:nth-child(3) { background: #8FC98A; }
+.dsk-frame img { width: 100%; display: block; }
+.dsk-cap { text-align: center; font-size: .9rem; color: var(--muted); margin-top: 16px; }
+
 /* ── download cards ──────────────────────────────────────────────────── */
 .dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .dlc {
