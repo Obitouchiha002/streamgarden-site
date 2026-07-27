@@ -188,6 +188,46 @@ header nav a:hover { color: var(--text); }
 .card b { color: var(--text); }
 .card.lit { background: linear-gradient(170deg, rgba(174,201,138,.09), var(--ink-2)); border-color: var(--line-2); }
 
+/* new-feature badge */
+.badge-new { display: inline-block; vertical-align: middle; margin-left: 7px; font-size: .58rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--sage); background: rgba(174,201,138,.14);
+  border: 1px solid var(--line-2); border-radius: 99px; padding: 2px 7px; }
+
+/* ── install guide (3 platforms) ─────────────────────────────────────── */
+.install { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+@media (max-width: 900px) { .install { grid-template-columns: 1fr; } }
+.inst {
+  border: 1px solid var(--line); border-radius: var(--r);
+  background: linear-gradient(170deg, var(--surface), var(--ink-2));
+  padding: 22px 20px 24px; display: flex; flex-direction: column; gap: 14px;
+}
+.inst header { display: flex; align-items: center; gap: 12px; }
+.inst header .ic { width: 40px; height: 40px; border-radius: 11px; background: rgba(174,201,138,.1); display: grid; place-items: center; flex: none; }
+.inst header .ic svg { width: 20px; height: 20px; color: var(--sage); }
+.inst header h3 { line-height: 1.1; }
+.inst-tag { display: block; font-family: var(--mono, monospace); font-size: .66rem; letter-spacing: .06em; color: var(--muted); margin-top: 3px; }
+.inst ol { margin: 0; padding-left: 0; list-style: none; counter-reset: step; display: flex; flex-direction: column; gap: 11px; }
+.inst ol li {
+  position: relative; padding-left: 30px; font-size: .9rem; color: var(--muted); line-height: 1.5;
+  counter-increment: step;
+}
+.inst ol li::before {
+  content: counter(step); position: absolute; left: 0; top: 0;
+  width: 20px; height: 20px; border-radius: 50%; background: rgba(174,201,138,.14);
+  color: var(--sage); font-size: .7rem; font-weight: 700; display: grid; place-items: center;
+}
+.inst ol li b { color: var(--text); }
+
+.safe-note {
+  margin-top: 18px; display: flex; gap: 14px; align-items: flex-start;
+  border: 1px solid var(--line-2); border-radius: var(--r);
+  background: rgba(174,201,138,.06); padding: 18px 20px;
+}
+.safe-note .ic { flex: none; width: 34px; height: 34px; border-radius: 10px; background: rgba(174,201,138,.13); display: grid; place-items: center; }
+.safe-note .ic svg { width: 18px; height: 18px; color: var(--sage); }
+.safe-note div { font-size: .9rem; color: var(--muted); line-height: 1.55; }
+.safe-note b { color: var(--text); display: block; margin-bottom: 3px; }
+
 /* ── formats ──────────────────────────────────────────────────────── */
 .fmt-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
 @media (max-width: 720px) { .fmt-wrap { grid-template-columns: 1fr; } }
