@@ -3,490 +3,334 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>StreamGarden — video &amp; audio downloader for Android, Windows and Mac</title>
-<meta name="description" content="Download video and audio on Android, Windows and Mac from YouTube, Instagram, Facebook, TikTok and more. Every quality up to 4K, real MP3 with cover art, and a built-in offline music player. Free, open source, no ads." />
-<meta name="theme-color" content="#0B0D08" />
-
+<title>StreamGarden — video &amp; audio downloader for Android, Windows &amp; Mac</title>
+<meta name="description" content="Download video and audio from YouTube, Instagram, TikTok and more — every quality up to 4K, real MP3 with cover art. Free on Android, Windows and Mac. Open source, no ads, no tracking." />
+<meta name="theme-color" content="#0A0C07" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="StreamGarden — video &amp; audio downloader for Android, Windows and Mac" />
-<meta property="og:description" content="Every quality up to 4K, real MP3 with cover art, and an offline music player. Runs entirely on your own device. Free and open source." />
+<meta property="og:title" content="StreamGarden — download any video, keep the whole quality" />
+<meta property="og:description" content="Every quality up to 4K, real MP3 with cover art, an offline music player. Android · Windows · Mac. Free and open source." />
 <meta property="og:image" content="shots/04-qualities.jpg" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
-<script>document.documentElement.classList.add('js');</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23AEC98A'/%3E%3Cpath d='M16 7v12m-5-5 5 5 5-5M9 25h14' stroke='%23101408' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
 </head>
 <body>
 
-<!-- ═══════════ top bar ═══════════ -->
+<!-- ═══════════════ header ═══════════════ -->
 <header id="hdr">
-  <div class="wrap">
-    <a class="brand" href="#home" data-go="home">
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#101408" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
-        </svg>
-      </span>
+  <div class="wrap bar">
+    <a class="brand" href="#top">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#0A0C07" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
       StreamGarden
     </a>
-    <nav>
-      <a class="desk" href="#features" data-go="features">Features</a>
-      <a class="desk" href="#screens" data-go="screens">Screenshots</a>
-      <a class="desk" href="#about" data-go="about">Details</a>
-      <button class="btn btn-primary btn-sm" data-download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
-        </svg>
-        Get the app
-      </button>
+    <nav class="links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
     </nav>
+    <a href="#download" class="btn btn-sage btn-sm">Get the app</a>
   </div>
 </header>
 
-<main id="shell">
+<main id="top">
 
-  <!-- ═══════════ HOME ═══════════ -->
-  <section class="panel active" id="home">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <span class="eyebrow">Android · Windows · Mac · Free &amp; open source</span>
-        <h1>Save any video.<br />Keep the <span class="accent">whole quality.</span></h1>
-        <p class="lede">
-          Most downloaders hand you 360p and a watermark. StreamGarden pulls the real streams
-          — up to 4K — on your own device, merges them without re-encoding, and turns any
-          track into a proper MP3 with its cover art attached. On Android, Windows and Mac.
-        </p>
-
-        <div class="cta-row">
-          <button class="btn btn-primary btn-lg" data-download>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3v12" /><path d="m7 11 5 5 5-5" /><path d="M5 21h14" />
-            </svg>
-            Download StreamGarden
-          </button>
-          <a class="btn btn-ghost btn-lg desk" href="#screens" data-go="screens">See it in action</a>
-        </div>
-
-        <div class="meta-row">
-          <span><i class="dot"></i> Android · Windows · macOS</span>
-          <span><i class="dot"></i> Free &amp; open source</span>
-          <span><i class="dot"></i> No ads, no tracking</span>
-        </div>
-
-        <!-- platforms it can pull from -->
-        <div class="platforms">
-          <span class="plat-label">Works with</span>
-          <div class="plat-row">
-            <span class="plat" title="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814ZM9.545 15.568V8.432L15.818 12l-6.273 3.568Z"/></svg><b>YouTube</b></span>
-            <span class="plat" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0Zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03Zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 1 0 0-12.324ZM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm7.846-10.405a1.441 1.441 0 0 1-2.88 0 1.44 1.44 0 0 1 2.88 0Z"/></svg><b>Instagram</b></span>
-            <span class="plat" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073Z"/></svg><b>Facebook</b></span>
-            <span class="plat" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z"/></svg><b>TikTok</b></span>
-            <span class="plat" title="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg><b>X</b></span>
-            <span class="plat plat-txt"><b>Dailymotion</b></span>
-            <span class="plat plat-txt"><b>Archive.org</b></span>
-          </div>
-        </div>
+  <!-- ═══════════════ hero ═══════════════ -->
+  <section class="hero">
+    <div class="glow"></div>
+    <div class="wrap hero-in reveal">
+      <span class="pill-eyebrow">Android · Windows · macOS · Free forever</span>
+      <h1>Download any video.<br />Keep the <span class="grad">whole quality.</span></h1>
+      <p class="lede">
+        Most downloaders hand you 360p and a watermark. StreamGarden pulls the real streams —
+        up to <b>4K</b> — right on your device, merges them without re-encoding, and turns any
+        track into a proper <b>MP3</b> with its cover art. No ads. No account. No tracking.
+      </p>
+      <div class="hero-cta">
+        <a href="#download" class="btn btn-sage btn-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Download free
+        </a>
+        <a href="#pricing" class="btn btn-ghost btn-lg">See Premium — ₹99</a>
       </div>
-
-      <!-- live sketch of the merge the app actually performs -->
-      <div class="viz" id="viz" aria-hidden="true">
-        <div class="viz-head">
-          <span class="viz-title">Downloading</span>
-          <span class="viz-chip">1080p · on device</span>
-        </div>
-        <div class="track">
-          <div class="track-label"><span>Video stream</span><b data-pct="v">0%</b></div>
-          <div class="bar"><i data-bar="v"></i></div>
-        </div>
-        <div class="track">
-          <div class="track-label"><span>Audio stream</span><b data-pct="a">0%</b></div>
-          <div class="bar"><i data-bar="a"></i></div>
-        </div>
-        <div class="merge"><span class="rule"></span><span id="mergeText">merging — no re-encode</span><span class="rule"></span></div>
-        <div class="result" id="result">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-          <span><span class="nm">Saved to Downloads</span><span class="sb">one file · full quality</span></span>
-        </div>
+      <div class="works">
+        <span class="works-label">Works with</span>
+        <span class="w-ic" title="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8ZM9.5 15.6V8.4l6.3 3.6-6.3 3.6Z"/></svg></span>
+        <span class="w-ic" title="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.3-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2Zm0 3.2A6.4 6.4 0 1 0 12 18.6 6.4 6.4 0 0 0 12 5.4Zm0 10.5A4.1 4.1 0 1 1 12 7.7a4.1 4.1 0 0 1 0 8.2Zm6.6-10.8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg></span>
+        <span class="w-ic" title="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z"/></svg></span>
+        <span class="w-ic" title="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.07C24 5.44 18.63.07 12 .07S0 5.44 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3.01 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.51c-1.49 0-1.96.93-1.96 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.02 24 18.06 24 12.07Z"/></svg></span>
+        <span class="w-ic" title="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93Zm-1.29 19.49h2.04L6.49 3.24H4.3l13.31 17.4Z"/></svg></span>
+        <span class="w-ic" title="Vimeo, Reddit, SoundCloud, Twitch & more">+more</span>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════ FEATURES ═══════════ -->
-  <section class="panel" id="features">
+  <!-- ═══════════════ features ═══════════════ -->
+  <section class="sec" id="features">
     <div class="wrap">
-      <div class="section-head rise">
-        <span class="eyebrow">What you get</span>
-        <h2>Built like a real app, not a wrapper.</h2>
-        <p>Everything runs on your own device — Android, Windows or Mac. No queue to wait in, no account to make, nothing to pay for.</p>
+      <div class="sec-head reveal">
+        <span class="tag">What you get</span>
+        <h2>A real app — not a website in disguise.</h2>
+        <p>Everything runs on your own device. Fast, private, and yours to keep.</p>
       </div>
-
-      <div class="grid g3">
-        <article class="card lit rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="m17 12 5-3v6l-5-3Z"/></svg></span>
-          <h3>Every quality, not just 360p</h3>
-          <p>720p, 1080p and above arrive as separate video and audio streams. The app fetches both and merges them with Android's own muxer — a stream copy, so nothing is re-encoded and nothing is lost.</p>
+      <div class="feat-grid">
+        <article class="feat reveal">
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><path d="m17 12 5-3v6l-5-3Z"/></svg></span>
+          <h3>Every quality, up to 4K</h3>
+          <p>720p, 1080p, 1440p, 4K — the real streams, merged without re-encoding. Nothing is lost, nothing is watermarked.</p>
         </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
-          <h3>Real MP3, with the cover art</h3>
-          <p>No site actually serves MP3. StreamGarden decodes the audio and re-encodes it on your phone with a built-in LAME encoder, then writes the title, artist and thumbnail into the file.</p>
+        <article class="feat reveal">
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+          <h3>Real MP3, with cover art</h3>
+          <p>No site actually serves MP3. StreamGarden encodes it on your device and writes the title, artist and thumbnail into the file.</p>
         </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg></span>
+        <article class="feat reveal">
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 12h7l-1 8 9-12h-7l1-8Z"/></svg></span>
           <h3>Downloads at full speed</h3>
-          <p>Servers throttle a single connection after its first burst. Each file comes down as several ranged chunks at once, so a long video finishes in a fraction of the time.</p>
+          <p>Files come down as several ranged chunks at once, so a long video finishes in a fraction of the usual time.</p>
         </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18l-2 5H5l-2-5Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-          <h3>An offline music player inside</h3>
-          <p>Every song on your phone in one place — playlists, favourites, swipe gestures, and playback that keeps going with the screen off, with lock-screen and headset controls.</p>
+        <article class="feat reveal">
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9"/><path d="M3 15h18l-2 5H5l-2-5Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <h3>Offline music player <span class="mini">Android</span></h3>
+          <p>Playlists, favourites, swipe gestures and background playback with lock-screen and headset controls — built right in.</p>
         </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg></span>
-          <h3>Share a link straight to it</h3>
-          <p>Tap Share anywhere — YouTube, Instagram, your browser — and pick StreamGarden. Copy a link instead and it offers to fetch that too, the moment you open the app.</p>
+        <article class="feat reveal gold-edge">
+          <span class="fic gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+          <h3>Ten links at once <span class="mini gold-mini">Premium</span></h3>
+          <p>On Windows &amp; Mac, paste a whole list of links — even glued in one paragraph — and they all queue and download together.</p>
         </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg></span>
-          <h3>Whole playlists, your pick</h3>
-          <p>Paste a playlist and every video shows up with a checkbox. Tick the ones you actually want — nothing downloads until you say so.</p>
-        </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
-          <h3>Ten links at once <span class="badge-new">Desktop</span></h3>
-          <p>On Windows and Mac, paste a whole list of links — even glued together in one paragraph — and they all queue up and download several at a time. Search as you type, trim a clip before you save, pull subtitles, MKV, WAV and FLAC.</p>
-        </article>
-        <article class="card rise">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 12h6"/></svg></span>
+        <article class="feat reveal">
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4M7 8h10M7 12h6"/></svg></span>
           <h3>Same app on every screen</h3>
-          <p>Phone, laptop, desktop — Android, Windows 10/11 and macOS (Apple Silicon and Intel). The same clean interface, the same downloads folder you already know.</p>
+          <p>Phone, laptop, desktop — Android, Windows 10/11 and macOS (Apple Silicon &amp; Intel). One clean interface everywhere.</p>
         </article>
-      </div>
-
-      <!-- formats + qualities -->
-      <div class="fmt-wrap rise">
-        <div class="fmt-col">
-          <span class="eyebrow">Video</span>
-          <div class="chips">
-            <span class="chip hi">4K</span><span class="chip hi">1440p</span><span class="chip hi">1080p</span>
-            <span class="chip">720p</span><span class="chip">480p</span><span class="chip">360p</span><span class="chip">240p</span>
-          </div>
-          <p class="fmt-note">Saved as MP4. Whatever the source offers, you get — the list is built from the real streams, not a fixed menu.</p>
-        </div>
-        <div class="fmt-col">
-          <span class="eyebrow">Audio</span>
-          <div class="chips">
-            <span class="chip hi">MP3 320</span><span class="chip hi">MP3 192</span><span class="chip">MP3 128</span>
-            <span class="chip">M4A</span><span class="chip">Opus</span><span class="chip">WebM</span>
-          </div>
-          <p class="fmt-note">MP3 is encoded on the phone and tagged with title, artist and cover art. Thumbnails can be pulled as JPG too.</p>
-        </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════ SCREENSHOTS ═══════════ -->
-  <section class="panel" id="screens">
+  <!-- ═══════════════ screenshots ═══════════════ -->
+  <section class="sec alt" id="screens">
     <div class="wrap">
-      <div class="section-head rise">
-        <span class="eyebrow">Inside the app</span>
-        <h2>This is what it actually looks like.</h2>
-        <p>Real screens, not mock-ups. Swipe through them.</p>
+      <div class="sec-head reveal">
+        <span class="tag">Inside the app</span>
+        <h2>Real screens, not mock-ups.</h2>
+        <p>Swipe through what it actually looks like.</p>
       </div>
-
-      <div class="shots rise">
-        <figure class="shot"><img src="shots/01-home.jpg" alt="StreamGarden home screen with a search box" loading="lazy" width="620" height="1234" /><figcaption>Paste a link, or just search</figcaption></figure>
-        <figure class="shot"><img src="shots/04-qualities.jpg" alt="Quality options listed for a video" loading="lazy" width="620" height="1234" /><figcaption>Every quality the source has</figcaption></figure>
-        <figure class="shot"><img src="shots/05-audio.jpg" alt="Audio formats including MP3" loading="lazy" width="620" height="1234" /><figcaption>MP3 and every audio format</figcaption></figure>
-        <figure class="shot"><img src="shots/02-music-library.jpg" alt="The built-in music library" loading="lazy" width="620" height="1234" /><figcaption>Your music, in the same app</figcaption></figure>
-        <figure class="shot"><img src="shots/03-now-playing.jpg" alt="Now playing screen with cover art" loading="lazy" width="620" height="1234" /><figcaption>Now playing, with real cover art</figcaption></figure>
+      <div class="shots reveal">
+        <figure><img src="shots/01-home.jpg" alt="Home screen" loading="lazy" /><figcaption>Paste a link, or search</figcaption></figure>
+        <figure><img src="shots/04-qualities.jpg" alt="Quality options" loading="lazy" /><figcaption>Every quality the source has</figcaption></figure>
+        <figure><img src="shots/05-audio.jpg" alt="Audio formats" loading="lazy" /><figcaption>MP3 and every audio format</figcaption></figure>
+        <figure><img src="shots/02-music-library.jpg" alt="Music library" loading="lazy" /><figcaption>Your music, same app</figcaption></figure>
+        <figure><img src="shots/03-now-playing.jpg" alt="Now playing" loading="lazy" /><figcaption>Now playing, real cover art</figcaption></figure>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════ DETAILS ═══════════ -->
-  <section class="panel" id="about">
+  <!-- ═══════════════ download ═══════════════ -->
+  <section class="sec" id="download">
     <div class="wrap">
-      <div class="section-head rise">
-        <span class="eyebrow">Installing</span>
-        <h2>Up and running in a minute — on any device.</h2>
-        <p>No downloader is allowed in the app stores, so each system shows a one-time safety prompt the first time. Here's exactly what you'll see, and the single tap past it.</p>
+      <div class="sec-head reveal">
+        <span class="tag">Download &amp; install</span>
+        <h2>Pick your device. Three quick steps.</h2>
+        <p>No downloader is allowed in the app stores, so each system shows a one-time safety prompt. Here's exactly what you'll see — and the one tap past it.</p>
       </div>
 
-      <div class="install rise">
-        <article class="inst">
-          <header>
-            <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.7-.4l-1.87 3.23a11.4 11.4 0 0 0-9.74 0L5.26 5.9a.4.4 0 1 0-.7.4L6.4 9.48A10.7 10.7 0 0 0 1 18h22a10.7 10.7 0 0 0-5.4-8.52ZM7 15.25a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm10 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg></span>
-            <div><h3>Android</h3><span class="inst-tag">APK · 8 MB · 6.0+</span></div>
-          </header>
-          <ol>
-            <li>Tap <b>Download APK</b>. Chrome may say “this file can harm your device” — that shows for every APK. Choose <b>Download anyway</b>.</li>
-            <li>Open the file. If Android blocks “installs from this source”, tap <b>Settings</b>, allow it, and go back.</li>
-            <li>Tap <b>Install</b>, then <b>Open</b>. That's it.</li>
+      <div class="dl-grid">
+        <!-- Android -->
+        <article class="dlc reveal">
+          <div class="dlc-top">
+            <span class="pic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.7-.4l-1.87 3.23a11.4 11.4 0 0 0-9.74 0L5.26 5.9a.4.4 0 1 0-.7.4L6.4 9.48A10.7 10.7 0 0 0 1 18h22a10.7 10.7 0 0 0-5.4-8.52ZM7 15.25a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm10 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg></span>
+            <div><h3>Android</h3><span class="muted">APK · 8 MB · 6.0+</span></div>
+          </div>
+          <ol class="steps">
+            <li><span>Tap Download. Chrome may warn about the file — that shows for every APK. Choose <b>Download anyway</b>.</span></li>
+            <li><span>Open it. If installs are blocked, tap <b>Settings</b>, allow this source, go back.</span></li>
+            <li><span>Tap <b>Install → Open</b>. Done.</span></li>
           </ol>
+          <a class="btn btn-sage dl-btn" href="StreamGarden.apk" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download APK · v2.7
+          </a>
         </article>
 
-        <article class="inst">
-          <header>
-            <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.2 4.5v7.1H3V5.5Zm0 13L10.2 19.5v-7H3v6ZM11.3 4.35 21 3v8.6h-9.7V4.35Zm0 15.3L21 21v-8.5h-9.7v7.15Z"/></svg></span>
-            <div><h3>Windows</h3><span class="inst-tag">Setup .exe · 10 / 11</span></div>
-          </header>
-          <ol>
-            <li>Download and run <b>StreamGarden-Setup.exe</b>.</li>
-            <li>“Windows protected your PC” appears because the app isn't paid-signed. Click <b>More info → Run anyway</b>.</li>
-            <li>Finish the installer — yt-dlp and ffmpeg are already inside, nothing else to install.</li>
+        <!-- Windows -->
+        <article class="dlc reveal">
+          <div class="dlc-top">
+            <span class="pic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.2 4.5v7.1H3V5.5Zm0 13L10.2 19.5v-7H3v6ZM11.3 4.35 21 3v8.6h-9.7V4.35Zm0 15.3L21 21v-8.5h-9.7v7.15Z"/></svg></span>
+            <div><h3>Windows</h3><span class="muted">Setup .exe · 10 / 11</span></div>
+          </div>
+          <ol class="steps">
+            <li><span>Download and run <b>StreamGarden-Setup.exe</b>.</span></li>
+            <li><span>“Windows protected your PC” appears — it isn't paid-signed. Click <b>More info → Run anyway</b>.</span></li>
+            <li><span>Finish installing. yt-dlp &amp; ffmpeg are already inside.</span></li>
           </ol>
+          <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest/download/StreamGarden-Setup.exe" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download for Windows · v1.5
+          </a>
         </article>
 
-        <article class="inst">
-          <header>
-            <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 1.43c.09 1-.31 1.96-.94 2.66-.67.74-1.77 1.31-2.83 1.23-.11-.98.36-1.98.95-2.61.68-.73 1.85-1.28 2.82-1.28ZM19.9 8.4c-1.22-.06-2.26.69-2.85.69-.6 0-1.5-.66-2.47-.64-1.27.02-2.44.74-3.09 1.88-1.32 2.29-.34 5.68.95 7.54.63.91 1.38 1.93 2.36 1.89.95-.04 1.31-.61 2.45-.61 1.14 0 1.47.61 2.47.59 1.02-.02 1.67-.92 2.29-1.84.72-1.05 1.02-2.07 1.04-2.12-.02-.01-2-.77-2.02-3.05-.02-1.9 1.56-2.81 1.63-2.86-.89-1.31-2.28-1.46-2.77-1.49Z"/></svg></span>
-            <div><h3>macOS</h3><span class="inst-tag">Silicon &amp; Intel · 10.15+</span></div>
-          </header>
-          <ol>
-            <li>Download the build for your chip (Apple menu → <b>About This Mac</b>), open the <b>.dmg</b>, drag StreamGarden to <b>Applications</b>.</li>
-            <li>Open it once — macOS says it “could not verify” the app. Click <b>Done</b>.</li>
-            <li><b>System Settings → Privacy &amp; Security</b>, scroll down, click <b>Open Anyway</b>, then <b>Open</b>.</li>
+        <!-- Mac -->
+        <article class="dlc reveal">
+          <div class="dlc-top">
+            <span class="pic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 1.43c.09 1-.31 1.96-.94 2.66-.67.74-1.77 1.31-2.83 1.23-.11-.98.36-1.98.95-2.61.68-.73 1.85-1.28 2.82-1.28ZM19.9 8.4c-1.22-.06-2.26.69-2.85.69-.6 0-1.5-.66-2.47-.64-1.27.02-2.44.74-3.09 1.88-1.32 2.29-.34 5.68.95 7.54.63.91 1.38 1.93 2.36 1.89.95-.04 1.31-.61 2.45-.61 1.14 0 1.47.61 2.47.59 1.02-.02 1.67-.92 2.29-1.84.72-1.05 1.02-2.07 1.04-2.12-.02-.01-2-.77-2.02-3.05-.02-1.9 1.56-2.81 1.63-2.86-.89-1.31-2.28-1.46-2.77-1.49Z"/></svg></span>
+            <div><h3>macOS</h3><span class="muted">Silicon &amp; Intel · 10.15+</span></div>
+          </div>
+          <ol class="steps">
+            <li><span>Pick your chip (Apple menu → <b>About This Mac</b>), open the <b>.dmg</b>, drag to Applications.</span></li>
+            <li><span>Open once — macOS says it “could not verify”. Click <b>Done</b>.</span></li>
+            <li><span><b>Settings → Privacy &amp; Security</b> → <b>Open Anyway</b> → <b>Open</b>.</span></li>
           </ol>
+          <div class="mac-btns">
+            <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-arm64.dmg" download>Apple Silicon · v1.6</a>
+            <a class="btn btn-ghost dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-x64.dmg" download>Intel Mac</a>
+          </div>
         </article>
       </div>
 
-      <div class="safe-note rise">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
-        <div>
-          <b>Those warnings are normal — not a red flag.</b>
-          They show on every app that isn't signed with a paid store certificate, which the same open tools (NewPipe, Seal, yt-dlp) all skip too. StreamGarden's full source is public, it asks for no camera, microphone or location, and it collects nothing about you or what you download.
-        </div>
+      <div class="safe reveal">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 11 4.6-2.5 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <p><b>These warnings are normal — not a red flag.</b> They appear on every app that isn't signed with a paid store certificate, just like NewPipe, Seal and yt-dlp. The full source is public, it asks for no camera, microphone or location, and collects nothing about you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ pricing ═══════════════ -->
+  <section class="sec alt" id="pricing">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag gold-tag">Pricing</span>
+        <h2>Free to use. Premium if you want more.</h2>
+        <p>Everything essential is free, forever. Premium is a single ₹99 payment — no subscription, ever.</p>
       </div>
 
-      <div class="section-head rise" style="margin-top:56px">
-        <span class="eyebrow">Under the hood</span>
-        <h2>For anyone who wants to know how.</h2>
+      <div class="price-grid">
+        <article class="plan reveal">
+          <div class="plan-head">
+            <h3>Free</h3>
+            <div class="price">₹0<span>/ forever</span></div>
+            <p class="plan-sub">Everything you need to download.</p>
+          </div>
+          <ul class="plan-list">
+            <li><i class="ck"></i> Video up to <b>720p</b></li>
+            <li><i class="ck"></i> All audio formats (M4A, Opus…)</li>
+            <li><i class="ck"></i> Offline music player (Android)</li>
+            <li><i class="ck"></i> Playlists, subtitles, trimming</li>
+            <li><i class="ck"></i> No ads, no tracking</li>
+          </ul>
+          <a href="#download" class="btn btn-ghost" style="width:100%">Download free</a>
+        </article>
+
+        <article class="plan premium reveal">
+          <span class="ribbon">Best value</span>
+          <div class="plan-head">
+            <h3>Premium <svg class="crown" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4 4 5-7 5 7 4-4-2 12H5L3 7Z"/></svg></h3>
+            <div class="price gold-price">₹99<span>once · lifetime</span></div>
+            <p class="plan-sub">Unlock the full power. One payment.</p>
+          </div>
+          <ul class="plan-list">
+            <li><i class="ck gold-ck"></i> Everything in Free, plus:</li>
+            <li><i class="ck gold-ck"></i> <b>Full quality</b> — 1080p, 1440p, 4K</li>
+            <li><i class="ck gold-ck"></i> <b>MP3</b> audio downloads</li>
+            <li><i class="ck gold-ck"></i> <b>Ten links at once</b> (multi-link)</li>
+            <li><i class="ck gold-ck"></i> No “StreamGarden -” filename</li>
+            <li><i class="ck gold-ck"></i> All future updates included</li>
+          </ul>
+          <a href="#getpremium" class="btn btn-gold" style="width:100%">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.2.9-5.5-4-3.9 5.5-.8L12 3Z"/></svg>
+            Get Premium — ₹99
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ how to get premium ═══════════════ -->
+  <section class="sec" id="getpremium">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="tag gold-tag">Get Premium</span>
+        <h2>Three steps. Two minutes.</h2>
+        <p>No card, no gateway. Message on WhatsApp, pay ₹99 by UPI, and your device is unlocked — for life.</p>
       </div>
 
-      <dl class="specs rise">
-        <div class="spec"><dt>Extraction</dt><dd>Runs on the device with NewPipeExtractor and an embedded JavaScript engine that executes the site's own player code to solve the stream cipher. <span>Your phone's IP does the talking, so it isn't blocked the way hosted downloaders are.</span></dd></div>
-        <div class="spec"><dt>Merging</dt><dd>Android <span>MediaMuxer</span>, stream copy only — no re-encode, no generation loss.</dd></div>
-        <div class="spec"><dt>MP3</dt><dd>Decoded with MediaCodec, re-encoded by a bundled LAME, tagged with ID3v2 <span>(title, artist, cover art)</span>.</dd></div>
-        <div class="spec"><dt>Transfer</dt><dd>Parallel ranged chunks over OkHttp, with cancel, quality switching mid-download and live progress.</dd></div>
-        <div class="spec"><dt>Music player</dt><dd>A foreground service with MediaSession — background playback, notification, lock-screen, headset and Bluetooth controls.</dd></div>
-        <div class="spec"><dt>Instagram &amp; Facebook</dt><dd>Resolved through a <span>Cobalt</span> instance. Public ones are built in; point it at your own for reliability.</dd></div>
-        <div class="spec"><dt>Permissions</dt><dd>Internet, notifications, vibration, and read-only access to your audio files for the player. <span>No camera, microphone, location or contacts.</span></dd></div>
-        <div class="spec"><dt>Requires</dt><dd>Android 6.0 (Marshmallow) or newer · 8.3 MB installed</dd></div>
-        <div class="spec"><dt>Built with</dt><dd>Capacitor 6 · React 19 · TypeScript · a custom native Java plugin</dd></div>
-        <div class="spec"><dt>Licence</dt><dd>GPL-3.0 — free to use, read, change and share.</dd></div>
-      </dl>
+      <div class="how-grid">
+        <article class="how reveal">
+          <span class="hn">1</span>
+          <h3>Message on WhatsApp</h3>
+          <p>Tap the button below. It opens WhatsApp with a ready-made message — just send it. (Your Device&nbsp;ID is in the app under <b>Settings → Your device</b>.)</p>
+        </article>
+        <article class="how reveal">
+          <span class="hn">2</span>
+          <h3>Pay ₹99 by UPI</h3>
+          <p>We'll reply with a UPI ID / QR. Pay the one-time ₹99 — no subscription, nothing recurring.</p>
+        </article>
+        <article class="how reveal">
+          <span class="hn">3</span>
+          <h3>Unlocked instantly</h3>
+          <p>Send the payment screenshot. Your device is switched to Premium right away — full quality, MP3 and multi-link unlock across all your devices.</p>
+        </article>
+      </div>
 
-      <div class="section-head rise" style="margin-top:56px">
-        <span class="eyebrow">Questions</span>
+      <div class="msg-box reveal">
+        <span class="msg-label">The message that gets sent:</span>
+        <div class="msg-bubble">Hi! I'd like StreamGarden Premium (₹99 lifetime). My Device ID is: ____</div>
+        <a class="btn btn-gold btn-lg wa-btn" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.15-1.7-.84-2-.94-.26-.1-.45-.14-.64.15-.19.28-.73.94-.9 1.13-.16.19-.33.21-.62.07-.29-.15-1.22-.45-2.33-1.44-.86-.77-1.44-1.72-1.6-2-.17-.29-.02-.45.12-.59.13-.13.29-.34.43-.51.15-.17.19-.29.29-.48.1-.19.05-.36-.02-.51-.07-.14-.64-1.55-.88-2.12-.23-.55-.47-.48-.64-.49h-.55c-.19 0-.5.07-.76.36-.26.29-1 .98-1 2.39s1.02 2.77 1.17 2.96c.15.19 2.02 3.08 4.9 4.32.68.29 1.22.47 1.63.6.69.22 1.31.19 1.8.11.55-.08 1.7-.69 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.34ZM12 2a10 10 0 0 0-8.5 15.3L2 22l4.8-1.5A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.15l-.3-.18-3 .78.8-2.9-.2-.32A8.2 8.2 0 1 1 12 20.2Z"/></svg>
+          Get Premium on WhatsApp
+        </a>
+        <p class="msg-note" id="wa-note">Opens WhatsApp with the message ready — just hit send.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════ faq ═══════════════ -->
+  <section class="sec alt" id="faq">
+    <div class="wrap narrow">
+      <div class="sec-head reveal">
+        <span class="tag">Questions</span>
         <h2>Straight answers.</h2>
       </div>
-
-      <div class="rise">
-        <details><summary>Why isn't it on the Play Store?</summary><p>Google's Device and Network Abuse policy doesn't allow apps that download content from platforms like YouTube. That's why NewPipe, Seal and every similar app are distributed the same way — as an APK, outside the store.</p></details>
-        <details><summary>Is it safe to install? What about the warnings?</summary><p>Yes. The full source is public, so nothing is hidden, and it asks for no camera, microphone, location or contacts. The prompts you see — Chrome's APK notice on Android, “Windows protected your PC”, and macOS's “could not verify” — all appear simply because the app isn't signed with a paid store certificate, not because anything is wrong. Every open-source downloader is distributed the same way.</p></details>
-        <details><summary>Which Mac download do I pick?</summary><p>Apple menu → <b>About This Mac</b>. If it says “Apple M1/M2/M3…”, choose <b>Apple Silicon</b>; if it says “Intel”, choose <b>Intel</b>. Both are the same app.</p></details>
-        <details><summary>Does it collect my data?</summary><p>No accounts, no analytics, no ads. The app registers a device identifier so the developer can push update notices — nothing about you, your files or your activity is collected.</p></details>
-        <details><summary>Where do my files go?</summary><p>Into <b>Downloads/StreamGarden</b> on your phone's own storage — visible to every file manager, gallery and music player. They're ordinary files; the app doesn't lock them in.</p></details>
-        <details><summary>How do updates work?</summary><p>Come back here and install the newer version over your current one — nothing is lost. Every app (Android, Windows, Mac) also shows a notice inside when a new version is out, and asks you to update once it's more than one version behind.</p></details>
-        <details><summary>Instagram or Facebook isn't downloading. Why?</summary><p>Those platforms have no public API, so they're resolved through a shared Cobalt server that can be busy or rate-limited. Running your own takes about ten minutes and makes them reliable.</p></details>
-        <details><summary>Can I download things I don't own the rights to?</summary><p>The app is a tool, and it doesn't decide that for you. Downloading copyrighted material can breach a platform's terms and your local law. Use it for your own content, for licensed and public-domain material, and for things you're allowed to keep offline.</p></details>
+      <div class="faq reveal">
+        <details><summary>Is it safe? What about those warnings?</summary><p>Yes. The full source is public and it asks for no camera, microphone, location or contacts. The prompts — Chrome's APK notice, “Windows protected your PC”, macOS's “could not verify” — appear only because the app isn't signed with a paid store certificate, not because anything is wrong. Every open-source downloader ships this way.</p></details>
+        <details><summary>Why isn't it on the app stores?</summary><p>Google and Apple don't allow apps that download from platforms like YouTube. That's why NewPipe, Seal and every similar app are distributed outside the stores — exactly like this.</p></details>
+        <details><summary>Which Mac build do I pick?</summary><p>Apple menu → <b>About This Mac</b>. “Apple M1/M2/M3…” → choose <b>Apple Silicon</b>; “Intel” → choose <b>Intel</b>. Same app either way.</p></details>
+        <details><summary>Is Premium a subscription?</summary><p>No. It's a single ₹99 payment, unlocked for life on your device, including all future updates. No renewals, no recurring charge.</p></details>
+        <details><summary>How do I actually get Premium?</summary><p>Message us on WhatsApp (button above), pay ₹99 by UPI, send the screenshot. We flip your device to Premium instantly. No card details ever leave your hands.</p></details>
+        <details><summary>Does it collect my data?</summary><p>No accounts, no analytics, no ads. The app registers a device identifier so updates and Premium can be applied — nothing about you, your files or your activity is collected.</p></details>
+        <details><summary>Where do my downloads go?</summary><p>Into a <b>StreamGarden</b> folder in your normal Downloads / storage — ordinary files, visible to every gallery, file manager and music player.</p></details>
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════ final CTA ═══════════════ -->
+  <section class="final reveal">
+    <div class="wrap">
+      <h2>Save the whole quality — free.</h2>
+      <p>Android, Windows and Mac. Open source. No ads, no tracking.</p>
+      <a href="#download" class="btn btn-sage btn-lg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Download StreamGarden
+      </a>
+    </div>
+  </section>
 </main>
 
-<!-- ═══════════ footer (desktop) ═══════════ -->
 <footer>
-  <div class="wrap foot-grid">
-    <div>
-      <a class="brand" href="#home" data-go="home">
-        <span class="mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#101408" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-        </span>
-        StreamGarden
-      </a>
-      <p class="foot-desc">
-        A free, open-source downloader for Android. It pulls video and audio from YouTube,
-        Instagram, Facebook, TikTok, X, Dailymotion and Archive.org — at every quality the
-        source actually offers, up to 4K. Music comes out as a real MP3 with its cover art
-        and tags in place, and there's a full offline player built in so you never need a
-        second app. Everything happens on your phone: no server sees your links, no account
-        is required, and there are no ads or trackers anywhere in it.
-      </p>
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <span class="logo sm"><svg viewBox="0 0 24 24" fill="none" stroke="#0A0C07" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+      StreamGarden
     </div>
-
-    <div class="foot-links">
-      <span class="foot-h">App</span>
-      <a href="#features" data-go="features">Features</a>
-      <a href="#screens" data-go="screens">Screenshots</a>
-      <a href="#about" data-go="about">How to install</a>
-      <button class="linky" data-download>Download APK</button>
-    </div>
-
-    <div class="foot-links">
-      <span class="foot-h">Supported</span>
-      <span class="foot-mut">YouTube · Instagram</span>
-      <span class="foot-mut">Facebook · TikTok · X</span>
-      <span class="foot-mut">Dailymotion · Archive.org</span>
-      <span class="foot-mut">MP4 · MP3 · M4A · Opus</span>
-    </div>
-  </div>
-
-  <div class="wrap">
-    <p class="legal">
-      StreamGarden hosts no content and circumvents no copy protection — it reads the same
-      public streams your browser does. You are responsible for what you download and for
-      respecting the rights of the people who made it. Made by
-      <b>Vansh Kashyap</b> · GPL-3.0 · v2.7
-    </p>
+    <nav class="foot-links">
+      <a href="#features">Features</a><a href="#download">Download</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
+    </nav>
+    <p class="foot-note">Made by Vansh Kashyap · GPL-3.0 · Free &amp; open source. Please respect the rights of content you download.</p>
   </div>
 </footer>
-
-<!-- ═══════════ mobile tab bar ═══════════ -->
-<nav class="tabbar" id="tabbar" aria-label="Sections">
-  <button class="tab active" data-go="home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
-    <span>Home</span>
-  </button>
-  <button class="tab" data-go="features">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6.4.7-4.8 4.3 1.4 6.4L12 16.8 6.4 20l1.4-6.4L3 9.3l6.4-.7Z"/></svg>
-    <span>Features</span>
-  </button>
-  <button class="tab tab-dl" data-download aria-label="Download the app">
-    <span class="dl-orb">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-    </span>
-  </button>
-  <button class="tab" data-go="screens">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M11 18h2"/></svg>
-    <span>Screens</span>
-  </button>
-  <button class="tab" data-go="about">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-    <span>Details</span>
-  </button>
-</nav>
-
-<!-- ═══════════ download card ═══════════ -->
-<div class="sheet-bg" id="dlBg" hidden>
-  <div class="dl-card" role="dialog" aria-modal="true" aria-labelledby="dlName">
-    <button class="dl-x" id="dlClose" aria-label="Close">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-    </button>
-
-    <div class="dl-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#101408" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/>
-      </svg>
-    </div>
-
-    <h3 id="dlName">StreamGarden</h3>
-    <p class="dl-sub">Video &amp; audio downloader</p>
-
-    <!-- Pick a platform; the panels below swap. -->
-    <div class="plat-switch" role="tablist" aria-label="Platform">
-      <button class="ps on" id="psAndroid" role="tab" aria-selected="true" aria-controls="panAndroid">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 9.48l1.84-3.18a.4.4 0 0 0-.7-.4l-1.87 3.23a11.4 11.4 0 0 0-9.74 0L5.26 5.9a.4.4 0 1 0-.7.4L6.4 9.48A10.7 10.7 0 0 0 1 18h22a10.7 10.7 0 0 0-5.4-8.52ZM7 15.25a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Zm10 0a1.1 1.1 0 1 1 0-2.2 1.1 1.1 0 0 1 0 2.2Z"/></svg>
-        Android
-      </button>
-      <button class="ps" id="psWindows" role="tab" aria-selected="false" aria-controls="panWindows">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.5 10.2 4.5v7.1H3V5.5Zm0 13L10.2 19.5v-7H3v6ZM11.3 4.35 21 3v8.6h-9.7V4.35Zm0 15.3L21 21v-8.5h-9.7v7.15Z"/></svg>
-        Windows
-      </button>
-      <button class="ps" id="psMac" role="tab" aria-selected="false" aria-controls="panMac">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.37 1.43c.09 1-.31 1.96-.94 2.66-.67.74-1.77 1.31-2.83 1.23-.11-.98.36-1.98.95-2.61.68-.73 1.85-1.28 2.82-1.28ZM19.9 8.4c-1.22-.06-2.26.69-2.85.69-.6 0-1.5-.66-2.47-.64-1.27.02-2.44.74-3.09 1.88-1.32 2.29-.34 5.68.95 7.54.63.91 1.38 1.93 2.36 1.89.95-.04 1.31-.61 2.45-.61 1.14 0 1.47.61 2.47.59 1.02-.02 1.67-.92 2.29-1.84.72-1.05 1.02-2.07 1.04-2.12-.02-.01-2-.77-2.02-3.05-.02-1.9 1.56-2.81 1.63-2.86-.89-1.31-2.28-1.46-2.77-1.49Z"/></svg>
-        Mac
-      </button>
-    </div>
-
-    <!-- Android -->
-    <div id="panAndroid" class="dl-pan">
-      <div class="dl-stats">
-        <div><b>2.7</b><span>Version</span></div>
-        <div><b>8.3 MB</b><span>Size</span></div>
-        <div><b>6.0+</b><span>Android</span></div>
-      </div>
-      <ul class="dl-list">
-        <li>Up to 4K, merged without re-encoding</li>
-        <li>MP3 with cover art and tags</li>
-        <li>Offline music player built in</li>
-        <li>No ads, no account, no tracking</li>
-      </ul>
-      <a class="btn btn-primary btn-lg dl-go" href="StreamGarden.apk" download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-        Download APK
-      </a>
-      <p class="dl-note">Signed release build · GPL-3.0 · Chrome may warn about APK files — that's normal, choose “Download anyway”.</p>
-    </div>
-
-    <!-- Windows -->
-    <div id="panWindows" class="dl-pan" hidden>
-      <div class="dl-stats">
-        <div><b>1.5</b><span>Version</span></div>
-        <div><b>Installer</b><span>Setup .exe</span></div>
-        <div><b>10 / 11</b><span>Windows</span></div>
-      </div>
-      <ul class="dl-list">
-        <li>Download queue — several at once, pause and resume</li>
-        <li>Trim to a section before saving</li>
-        <li>Subtitles, MKV, WAV, FLAC and more</li>
-        <li>Copy a link and it offers to fetch it, instantly</li>
-      </ul>
-      <!-- Points straight at the release asset. GitHub serves those with a download
-           disposition, so the file starts saving immediately — no page in between. The
-           filename is fixed, so this link survives every new version. -->
-      <a class="btn btn-primary btn-lg dl-go"
-         href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest/download/StreamGarden-Setup.exe"
-         download>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-        Download for Windows
-      </a>
-      <p class="dl-note">
-        yt-dlp and ffmpeg ship inside — nothing else to install. GPL-3.0 · Windows may show a
-        “Windows protected your PC” notice for unsigned apps; choose <b>More info → Run anyway</b>.
-      </p>
-    </div>
-
-    <!-- macOS -->
-    <div id="panMac" class="dl-pan" hidden>
-      <div class="dl-stats">
-        <div><b>1.6</b><span>Version</span></div>
-        <div><b>.dmg</b><span>Disk image</span></div>
-        <div><b>10.15+</b><span>macOS</span></div>
-      </div>
-      <ul class="dl-list">
-        <li>Universal — Apple Silicon and Intel</li>
-        <li>Download queue, trim, subtitles, MKV/WAV/FLAC</li>
-        <li>Copy a link and it offers to fetch it</li>
-        <li>yt-dlp and ffmpeg bundled — nothing else to install</li>
-      </ul>
-      <div class="mac-dl">
-        <a class="btn btn-primary btn-lg dl-go"
-           href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-arm64.dmg"
-           download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-          Apple Silicon (M1–M4)
-        </a>
-        <a class="btn btn-ghost btn-lg dl-go"
-           href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-x64.dmg"
-           download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-          Intel Mac
-        </a>
-      </div>
-      <p class="dl-note">
-        Not sure which? Apple menu →  <b>About This Mac</b>: “Apple M…” = Apple Silicon, “Intel” = Intel.
-        GPL-3.0 · The app is unsigned, so first launch: try to open it, then go to
-        <b>System Settings → Privacy &amp; Security → Open Anyway</b>. It opens normally after that.
-      </p>
-    </div>
-  </div>
-</div>
 
 <script src="script.js"></script>
 </body>
