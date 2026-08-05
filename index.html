@@ -35,10 +35,52 @@
   "operatingSystem": "Android, Windows, macOS",
   "applicationCategory": "MultimediaApplication",
   "description": "Free, open-source video and audio downloader for Android, Windows and Mac. Save from YouTube, Instagram, TikTok, Facebook and more — every quality up to 4K, real MP3 with cover art.",
-  "softwareVersion": "2.7",
+  "softwareVersion": "2.15",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-  "author": { "@type": "Person", "name": "Vansh Kashyap" },
+  "author": { "@id": "https://vanshkashyap.lzworth.in/#vansh" },
+  "creator": { "@id": "https://vanshkashyap.lzworth.in/#vansh" },
   "publisher": { "@type": "Organization", "name": "StreamGarden", "url": "https://streamgd.lzworth.in/" }
+}
+</script>
+
+<!-- Person identity: ties StreamGarden to its maker Vansh Kashyap, so a search for his name
+     surfaces this project, links to his portfolio, and lets Google use his photo. The @id is the
+     same canonical identity used on vanshkashyap.lzworth.in, so the two pages reinforce each other. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://vanshkashyap.lzworth.in/#vansh",
+  "name": "Vansh Kashyap",
+  "alternateName": ["Vansh", "techbyvansh"],
+  "url": "https://vanshkashyap.lzworth.in/",
+  "image": "https://vanshkashyap.lzworth.in/assets/img/portrait-640.jpg?v=2",
+  "jobTitle": "Full-stack Web & Mobile Developer",
+  "description": "Vansh Kashyap is a Delhi-based full-stack web and mobile developer, co-founder of LZ Worth and creator of StreamGarden, JanamJyot, Hisaabi and other apps. He builds websites, Android apps and AI automation systems.",
+  "worksFor": [
+    { "@type": "Organization", "name": "LZ Worth", "url": "https://lzworth.in/" },
+    { "@type": "Organization", "name": "Grivaa Capital" }
+  ],
+  "knowsAbout": ["Web development", "Android development", "React", "Capacitor", "AI automation", "SEO"],
+  "sameAs": [
+    "https://github.com/Obitouchiha002",
+    "https://www.linkedin.com/in/vansh-kashyap-32a46a2a6",
+    "https://youtube.com/@techbyvansh",
+    "https://instagram.com/vanshkashayp70",
+    "https://streamgd.lzworth.in/"
+  ]
+}
+</script>
+
+<!-- Ties this exact page (StreamGarden) to Vansh Kashyap as its author, and to his projects. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "StreamGarden",
+  "url": "https://streamgd.lzworth.in/",
+  "author": { "@id": "https://vanshkashyap.lzworth.in/#vansh" },
+  "creator": { "@id": "https://vanshkashyap.lzworth.in/#vansh" }
 }
 </script>
 
@@ -193,7 +235,7 @@
           </ol>
           <a class="btn btn-sage dl-btn" href="StreamGarden.apk" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-            Download APK · v2.7
+            Download APK · v2.15
           </a>
         </article>
 
@@ -208,9 +250,9 @@
             <li><span>“Windows protected your PC” appears — it isn't paid-signed. Click <b>More info → Run anyway</b>.</span></li>
             <li><span>Finish installing. yt-dlp &amp; ffmpeg are already inside.</span></li>
           </ol>
-          <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/latest/download/StreamGarden-Setup.exe" download>
+          <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/download/v1.0/StreamGarden-Setup.exe" download>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg>
-            Download for Windows · v1.7
+            Download for Windows · v1.0
           </a>
         </article>
 
@@ -226,8 +268,8 @@
             <li><span><b>Settings → Privacy &amp; Security</b> → <b>Open Anyway</b> → <b>Open</b>.</span></li>
           </ol>
           <div class="mac-btns">
-            <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-arm64.dmg" download>Apple Silicon · v1.8</a>
-            <a class="btn btn-ghost dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/latest/download/StreamGarden-mac-x64.dmg" download>Intel Mac</a>
+            <a class="btn btn-sage dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/download/v1.13/StreamGarden-mac-arm64.dmg" download>Apple Silicon · v1.13</a>
+            <a class="btn btn-ghost dl-btn" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/download/v1.13/StreamGarden-mac-x64.dmg" download>Intel Mac</a>
           </div>
         </article>
       </div>
@@ -369,7 +411,7 @@
     <nav class="foot-links">
       <a href="#features">Features</a><a href="#download">Download</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a>
     </nav>
-    <p class="foot-note">Made by Vansh Kashyap · GPL-3.0 · Free &amp; open source. Please respect the rights of content you download.</p>
+    <p class="foot-note">Made by <a href="https://vanshkashyap.lzworth.in/" rel="author me" title="Vansh Kashyap — developer portfolio">Vansh Kashyap</a> · GPL-3.0 · Free &amp; open source. Please respect the rights of content you download.</p>
   </div>
 </footer>
 
