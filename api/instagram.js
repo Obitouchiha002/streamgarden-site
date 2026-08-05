@@ -55,6 +55,10 @@ export default async function handler(req, res) {
       signal: AbortSignal.timeout(9000),
     });
     const raw = await r.text();
+    if (req.query && req.query.debug === '1') {
+      const uid = decodeURIComponent(sid).split(':')[0];
+      return res.status(200).json({ hasSid: !!sid, sidLen: sid.length, uid, mediaId, status: r.status, body: raw.slice(0, 240) });
+    }
     if (r.status === 401 || r.status === 403) {
       return res.status(502).json({ error: 'Instagram login expired — refresh the sessionid.' });
     }
