@@ -33,6 +33,14 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).end();
 
+  // DISABLED by default. Instagram challenge-flags a sessionid the moment it's used from a
+  // datacenter (Vercel) IP, which risks getting the login banned. So this resolver does NOT
+  // touch Instagram unless IG_ENABLED === '1' is set in the Vercel env (only makes sense behind
+  // a residential/mobile proxy). While off, it returns 503 fast and the app falls back to Cobalt.
+  if (process.env.IG_ENABLED !== '1') {
+    return res.status(503).json({ error: 'Instagram resolver is disabled.' });
+  }
+
   const sid = process.env.IG_SESSIONID;
   if (!sid) return res.status(500).json({ error: 'Instagram is not configured on the server yet.' });
 
