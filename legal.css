@@ -1,0 +1,31 @@
+/* Shared style for StreamGarden legal pages — dark aurora theme, matches account.html. */
+:root{--ink:#EAEFE0;--sub:#9BA891;--sage:#AEC98A;--card:rgba(255,255,255,.045);
+  --line:rgba(255,255,255,.10);--gold:#E8C766}
+*{box-sizing:border-box}
+body{margin:0;background:#080A05;color:var(--ink);
+  font:16px/1.7 -apple-system,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;
+  background:radial-gradient(120% 120% at 50% 0%,#0e1208 0%,#080A05 60%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.4}
+.b1{width:480px;height:480px;background:#5A7A2E;top:-140px;left:-120px}
+.b2{width:420px;height:420px;background:#3f5a22;bottom:-160px;right:-120px}
+.wrap{max-width:780px;margin:0 auto;padding:28px 20px 80px}
+.bar{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.back{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);
+  font-size:20px;flex-shrink:0}
+.logo{width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center}
+.brand{font-weight:700;font-size:18px}
+h1{font-size:26px;margin:8px 0 4px}
+.updated{color:var(--sub);font-size:14px;margin:0 0 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px 26px;margin-bottom:18px}
+h2{font-size:18px;color:var(--sage);margin:22px 0 8px}
+h2:first-child{margin-top:0}
+p,li{color:#D4DCC8}
+a{color:var(--sage)}
+ul{padding-left:20px}
+.mail{color:var(--gold);font-weight:600}
+.foot{text-align:center;color:var(--sub);font-size:13px;margin-top:36px}
+.foot a{color:var(--sub)}
