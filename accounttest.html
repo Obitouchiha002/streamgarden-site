@@ -41,18 +41,13 @@
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.1 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.8 6c1.9-5.6 7.1-9.8 13.7-9.8z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9.1h12.4c-.5 2.9-2.1 5.3-4.6 7l7.1 5.5c4.2-3.9 6.2-9.6 6.2-17z"/><path fill="#FBBC05" d="M10.3 28.7c-.5-1.4-.7-2.9-.7-4.7s.3-3.3.7-4.7l-7.8-6C1 16.6 0 20.2 0 24s1 7.4 2.5 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.1 0 11.3-2 15-5.5l-7.1-5.5c-2 1.4-4.6 2.2-7.9 2.2-6.6 0-11.8-4.2-13.7-9.8l-7.8 6C6.4 42.6 14.6 48 24 48z"/></svg>
       Continue with Google
     </button>
-    <div style="text-align:center;color:var(--sub);font-size:12px;margin:12px 0 2px">— ya email —</div>
-    <label>Email (code SMTP setup ke baad)</label>
+    <div style="text-align:center;color:var(--sub);font-size:12px;margin:12px 0 2px">— ya email + password —</div>
+    <label>Email</label>
     <input id="email" type="email" placeholder="you@email.com" autocomplete="email">
-    <button id="sendBtn" class="ghost">Send code</button>
-  </div>
-
-  <!-- Step 2: OTP -->
-  <div id="s_otp" class="hidden">
-    <label>6-digit code (email me aaya)</label>
-    <input id="otp" inputmode="numeric" placeholder="••••••" style="text-align:center;letter-spacing:6px">
-    <button id="verifyBtn">Verify & sign in</button>
-    <button id="backBtn" class="ghost">Change email</button>
+    <label>Password</label>
+    <input id="pw" type="password" placeholder="min 6 characters" autocomplete="current-password">
+    <button id="signinBtn" class="ghost">Sign in</button>
+    <button id="signupBtn" class="ghost" style="margin-top:8px">Create account</button>
   </div>
 
   <!-- Step 3: signed in -->
@@ -78,7 +73,7 @@ const API='https://streamgd.lzworth.in/api';
 const $=id=>document.getElementById(id);
 const show=(m,ok)=>{const e=$('out');e.textContent=m;e.className='out '+(ok?'ok':'err')};
 let session=null;
-function step(s){['s_email','s_otp','s_in'].forEach(x=>$(x).classList.toggle('hidden',x!=='s_'+s))}
+function step(s){['s_email','s_in'].forEach(x=>$(x).classList.toggle('hidden',x!=='s_'+s))}
 
 // Google sign-in — redirect out to Google, come back with the token in the URL hash.
 $('googleBtn').onclick=()=>{
@@ -102,23 +97,22 @@ async function api(path,body,token){
   return {status:r.status,data:await r.json().catch(()=>null)};
 }
 
-$('sendBtn').onclick=async()=>{
-  const email=$('email').value.trim(); if(!email)return;
-  $('sendBtn').disabled=true; show('Sending code…',true);
-  const r=await api('/auth/v1/otp',{email,create_user:true});
-  $('sendBtn').disabled=false;
-  if(r.status<400){show('Code bheja — email dekho',true);step('otp')}
-  else show('❌ '+(r.data?.msg||r.data?.error_description||'send failed'),false);
-};
-$('backBtn').onclick=()=>{step('email');$('out').className='out'};
-
-$('verifyBtn').onclick=async()=>{
-  const email=$('email').value.trim(), token=$('otp').value.trim();
-  $('verifyBtn').disabled=true; show('Verifying…',true);
-  const r=await api('/auth/v1/verify',{type:'email',email,token});
-  $('verifyBtn').disabled=false;
+$('signinBtn').onclick=async()=>{
+  const email=$('email').value.trim(), password=$('pw').value; if(!email||!password){show('Email + password daalo',false);return}
+  $('signinBtn').disabled=true; show('Signing in…',true);
+  const r=await api('/auth/v1/token?grant_type=password',{email,password});
+  $('signinBtn').disabled=false;
   if(r.status<400&&r.data?.access_token){session={t:r.data.access_token,u:r.data.user};show('',true);await loadStatus();step('in')}
-  else show('❌ '+(r.data?.msg||r.data?.error_description||'wrong/expired code'),false);
+  else show('❌ '+(r.data?.error_description||r.data?.msg||'Wrong email or password'),false);
+};
+$('signupBtn').onclick=async()=>{
+  const email=$('email').value.trim(), password=$('pw').value; if(!email||!password){show('Email + password daalo',false);return}
+  $('signupBtn').disabled=true; show('Creating account…',true);
+  const r=await api('/auth/v1/signup',{email,password});
+  $('signupBtn').disabled=false;
+  if(r.status<400&&r.data?.access_token){session={t:r.data.access_token,u:r.data.user};show('✅ Account bana!',true);await loadStatus();step('in')}
+  else if(r.status<400){show('Account bana — Supabase me "Confirm email" OFF karo, phir Sign in',false)}
+  else show('❌ '+(r.data?.msg||r.data?.error_description||'Signup failed'),false);
 };
 
 async function loadStatus(){
