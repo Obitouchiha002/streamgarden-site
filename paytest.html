@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Premium payment test</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root { --bg:#F2F2F7; --card:#fff; --ink:#1C1C1E; --sub:#8E8E93; --accent:#007AFF;
+          --good:#34C759; --bad:#FF3B30; --line:rgba(60,60,67,.1); }
+  @media (prefers-color-scheme: dark){ :root{ --bg:#000;--card:#1C1C1E;--ink:#fff;--sub:#98989F;--accent:#0A84FF;--line:rgba(255,255,255,.1);} }
+  *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,"SF Pro Text",system-ui,sans-serif;
+       min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;-webkit-font-smoothing:antialiased}
+  .card{background:var(--card);border-radius:20px;padding:28px;max-width:400px;width:100%;
+        box-shadow:0 8px 30px rgba(0,0,0,.08)}
+  h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+  .price{font-size:40px;font-weight:800;letter-spacing:-.03em;margin:6px 0 2px}
+  .sub{color:var(--sub);font-size:14px}
+  label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--sub);margin:18px 0 6px}
+  input{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:11px;
+        padding:12px 14px;font-size:16px;outline:none}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(0,122,255,.14)}
+  button{width:100%;margin-top:20px;border:0;border-radius:13px;padding:15px;font-size:17px;font-weight:600;
+         background:var(--accent);color:#fff;cursor:pointer}
+  button:active{transform:scale(.98)}
+  button[disabled]{opacity:.5}
+  .out{margin-top:16px;font-size:14px;padding:12px 14px;border-radius:11px;display:none}
+  .out.ok{display:block;background:rgba(52,199,89,.12);color:var(--good)}
+  .out.err{display:block;background:rgba(255,59,48,.12);color:var(--bad)}
+  .hint{margin-top:16px;font-size:12px;color:var(--sub);line-height:1.5}
+  code{background:var(--bg);padding:2px 6px;border-radius:5px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🌱 StreamGarden Premium</h1>
+  <div class="price">₹99<span style="font-size:18px;font-weight:600;color:var(--sub)"> / year</span></div>
+  <div class="sub">Full quality · MP3 · no filename branding</div>
+
+  <label for="dev">Device id (test)</label>
+  <input id="dev" value="paytest-device" autocomplete="off">
+
+  <button id="buy">Get Premium — pay ₹99</button>
+  <div id="out" class="out"></div>
+
+  <div class="hint">
+    <b>Test mode</b> — koi real paisa nahi katega. Razorpay modal me:<br>
+    • Card: <code>4111 1111 1111 1111</code>, koi future date, koi CVV<br>
+    • Ya UPI: <code>success@razorpay</code><br>
+    Success pe premium grant hoga aur us device par turant on ho jayega.
+  </div>
+</div>
+
+<script>
+const API = 'https://streamgd.lzworth.in/api';
+const $ = (id) => document.getElementById(id);
+const out = (msg, ok) => { const e = $('out'); e.textContent = msg; e.className = 'out ' + (ok ? 'ok' : 'err'); };
+
+$('buy').onclick = async () => {
+  const deviceId = $('dev').value.trim() || 'paytest-device';
+  $('buy').disabled = true; out('Starting…', true);
+  try {
+    const o = await (await fetch(`${API}/pay-order`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ device_id: deviceId, app: 'paytest' }),
+    })).json();
+    if (!o.order_id) throw new Error(o.error || 'order failed');
+
+    const rzp = new Razorpay({
+      key: o.key_id, order_id: o.order_id, amount: o.amount, currency: o.currency,
+      name: 'StreamGarden', description: 'Premium — 1 year', theme: { color: '#007AFF' },
+      handler: async (resp) => {
+        out('Verifying…', true);
+        const v = await (await fetch(`${API}/pay-verify`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_order_id: resp.razorpay_order_id,
+            razorpay_payment_id: resp.razorpay_payment_id,
+            razorpay_signature: resp.razorpay_signature,
+            device_id: deviceId,
+          }),
+        })).json();
+        if (v.ok) out('✅ Premium ON till ' + new Date(v.premium_until).toLocaleDateString() + ' for ' + deviceId, true);
+        else out('❌ ' + (v.error || 'verify failed'), false);
+        $('buy').disabled = false;
+      },
+      modal: { ondismiss: () => { out('Payment cancelled', false); $('buy').disabled = false; } },
+    });
+    rzp.open();
+  } catch (e) {
+    out('❌ ' + e.message, false); $('buy').disabled = false;
+  }
+};
+</script>
+</body>
+</html>
