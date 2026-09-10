@@ -12,6 +12,9 @@
   *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
   body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
   .top{width:100%;max-width:440px;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .back{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);font-size:20px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .back:active{transform:scale(.94)}
+  .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
   .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center}
   .brand{font-weight:700;font-size:18px;letter-spacing:-.02em}
   .card{background:var(--card);border-radius:20px;padding:24px;max-width:440px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
@@ -48,8 +51,11 @@
 </head>
 <body>
   <div class="top">
-    <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0C07" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
-    <span class="brand">StreamGarden</span>
+    <a href="/" class="back" title="Back to home" aria-label="Back">←</a>
+    <a href="/" class="homelink">
+      <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0C07" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+      <span class="brand">StreamGarden</span>
+    </a>
   </div>
 
   <!-- SIGNED OUT -->
