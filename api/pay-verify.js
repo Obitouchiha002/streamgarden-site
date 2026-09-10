@@ -52,6 +52,21 @@ export default async function handler(req, res) {
     });
     const rows = await r.json().catch(() => []);
     if (!r.ok) return res.status(502).json({ error: 'Paid, but activating premium failed — contact support' });
+
+    // Log the purchase so it shows in the admin panel (best-effort — never fail the response on it).
+    const email = (Array.isArray(rows) && rows[0] && rows[0].email) || b.email || null;
+    try {
+      await fetch(`${SUPA}/rest/v1/purchases`, {
+        method: 'POST',
+        headers: { apikey: SERVICE, Authorization: `Bearer ${SERVICE}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({
+          account_id: accountId || null, email, device_id: deviceId || null, app: b.app || null,
+          amount: 99, payment_id: payId, order_id: orderId, premium_until: until,
+        }),
+        signal: AbortSignal.timeout(6000),
+      });
+    } catch { /* the payment + premium already succeeded; the log is secondary */ }
+
     if (!Array.isArray(rows) || rows.length === 0) {
       // Row not found (account/device not registered yet). Rare — happens on launch/first login.
       return res.status(200).json({ ok: true, premium: true, premium_until: until, note: 'reopen/re-login to sync' });
