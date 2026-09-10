@@ -4,52 +4,85 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>StreamGarden — Account</title>
-<meta name="description" content="Sign in to StreamGarden, manage your Premium plan and download the app.">
+<meta name="description" content="Sign in to StreamGarden, manage your Premium plan and download the app for Android, Windows and Mac.">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
-  :root{--bg:#F2F2F7;--card:#fff;--ink:#1C1C1E;--sub:#8E8E93;--accent:#5A5A40;--accent2:#8B9B6A;--good:#34C759;--bad:#FF3B30;--gold:#B7791F;--line:rgba(60,60,67,.1)}
-  @media(prefers-color-scheme:dark){:root{--bg:#0A0C07;--card:#17170F;--ink:#F2F1E8;--sub:#98988F;--line:rgba(255,255,255,.1)}}
+  :root{
+    --ink:#F2F1E8; --sub:#9a9a8c; --sage:#AEC98A; --moss:#5A5A40; --moss2:#8B9B6A;
+    --gold:#E0B24C; --good:#5CD08A; --bad:#FF6B5E;
+    --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.10); --fieldbg:rgba(255,255,255,.05);
+  }
   *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
-  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
+  html,body{min-height:100%}
+  body{background:#080A05;color:var(--ink);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,"Segoe UI",sans-serif;
+       -webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;
+       display:flex;flex-direction:column;align-items:center;padding:24px 16px 56px}
+  /* animated aurora background */
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(120% 120% at 50% 0%,#0e1208 0%,#080A05 60%)}
+  .blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;will-change:transform}
+  .b1{width:480px;height:480px;background:#5A7A2E;top:-140px;left:-120px;animation:f1 18s ease-in-out infinite}
+  .b2{width:420px;height:420px;background:#3f5a22;bottom:-160px;right:-120px;animation:f2 22s ease-in-out infinite}
+  .b3{width:300px;height:300px;background:#7a6a2e;top:40%;left:55%;opacity:.35;animation:f3 26s ease-in-out infinite}
+  @keyframes f1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(80px,60px) scale(1.15)}}
+  @keyframes f2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-70px,-50px) scale(1.1)}}
+  @keyframes f3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-60px,40px) scale(1.2)}}
+  @media (prefers-reduced-motion:reduce){.blob{animation:none}}
+
   .top{width:100%;max-width:440px;display:flex;align-items:center;gap:10px;margin-bottom:18px}
-  .back{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);font-size:20px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .back{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--ink);font-size:20px;flex-shrink:0;backdrop-filter:blur(10px)}
   .back:active{transform:scale(.94)}
   .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
   .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center}
   .brand{font-weight:700;font-size:18px;letter-spacing:-.02em}
-  .card{background:var(--card);border-radius:20px;padding:24px;max-width:440px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;max-width:440px;width:100%;
+        backdrop-filter:blur(20px);box-shadow:0 10px 40px rgba(0,0,0,.4)}
   h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
   .sub{color:var(--sub);font-size:14px;margin-top:4px}
   label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--sub);letter-spacing:.02em;margin:16px 0 6px}
-  input{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s}
-  input:focus{border-color:var(--accent2);box-shadow:0 0 0 3.5px rgba(139,155,106,.18)}
-  button{width:100%;margin-top:12px;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:600;background:var(--accent);color:#fff;cursor:pointer;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:9px}
+  input{width:100%;background:var(--fieldbg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s}
+  input:focus{border-color:var(--moss2);box-shadow:0 0 0 3.5px rgba(139,155,106,.22)}
+  input::placeholder{color:var(--sub)}
+  button{width:100%;margin-top:12px;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:600;
+         background:linear-gradient(135deg,#8B9B6A,#5A5A40);color:#0d0f08;cursor:pointer;transition:opacity .15s,transform .1s;
+         display:flex;align-items:center;justify-content:center;gap:9px}
   button:active{transform:scale(.98);opacity:.9} button[disabled]{opacity:.5}
-  button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
-  button.google{background:#fff;color:#1C1C1E;border:1px solid var(--line)}
-  button.gold{background:var(--gold)}
+  button.ghost{background:transparent;color:var(--sage);border:1px solid var(--line)}
+  button.google{background:#fff;color:#1C1C1E;border:0}
+  button.gold{background:linear-gradient(135deg,#E8C766,#C9982E);color:#221a06}
   .divider{display:flex;align-items:center;gap:12px;color:var(--sub);font-size:12px;margin:16px 0 4px}
   .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
   .row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
   .row:last-of-type{border-bottom:0}
   .row .k{color:var(--sub);font-size:13px} .row .v{font-weight:600;text-align:right;word-break:break-word;max-width:60%}
   .badge{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px}
-  .badge.prem{background:rgba(183,121,31,.14);color:var(--gold)} .badge.free{background:rgba(120,120,128,.14);color:var(--sub)}
+  .badge.prem{background:rgba(224,178,76,.18);color:var(--gold)} .badge.free{background:rgba(255,255,255,.1);color:var(--sub)}
   .out{margin-top:14px;font-size:14px;padding:12px 14px;border-radius:12px;display:none}
-  .out.ok{display:block;background:rgba(52,199,89,.12);color:var(--good)}
-  .out.err{display:block;background:rgba(255,59,48,.12);color:var(--bad)}
-  .hint{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.5}
-  .price{font-size:15px;color:var(--sub);margin-top:2px}
-  .avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;flex-shrink:0}
+  .out.ok{display:block;background:rgba(92,208,138,.14);color:var(--good)}
+  .out.err{display:block;background:rgba(255,107,94,.14);color:var(--bad)}
+  .hint{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.5;max-width:440px;text-align:center}
+  .price{font-size:14px;color:var(--sub);margin-top:6px;text-align:center}
+  .avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center;color:#0d0f08;font-weight:700;font-size:20px;flex-shrink:0}
   .namebox{display:flex;align-items:center;gap:13px;margin-bottom:4px}
-  .pencil{background:none;border:0;padding:6px;width:auto;margin:0;color:var(--sub);cursor:pointer}
-  .getapp{margin-top:16px;padding:16px;background:var(--bg);border-radius:14px}
+  .pencil{background:none;border:0;padding:6px;width:auto;margin:0;color:var(--sub);cursor:pointer;font-size:15px}
+  .getapp{margin-top:16px;padding:16px;background:rgba(224,178,76,.08);border:1px solid rgba(224,178,76,.2);border-radius:14px}
   .getapp h3{font-size:15px;font-weight:700} .getapp p{font-size:13px;color:var(--sub);margin-top:3px}
-  a.applink{display:block;text-align:center;margin-top:10px;background:var(--accent);color:#fff;text-decoration:none;border-radius:11px;padding:12px;font-weight:600;font-size:15px}
+  a.applink{display:block;text-align:center;margin-top:10px;background:linear-gradient(135deg,#8B9B6A,#5A5A40);color:#0d0f08;text-decoration:none;border-radius:11px;padding:12px;font-weight:600;font-size:15px}
+  /* download all platforms */
+  .dl h3{font-size:16px;font-weight:700}
+  .dlrow{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+  .dlrow:last-child{border-bottom:0}
+  .dlrow:active{opacity:.7}
+  .dlic{width:38px;height:38px;border-radius:11px;background:var(--fieldbg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px}
+  .dlrow .t{flex:1;min-width:0}
+  .dlrow .t b{font-size:15px;font-weight:600} .dlrow .t span{display:block;font-size:12px;color:var(--sub)}
+  .dlrow .arrow{color:var(--sub);font-size:18px}
   .hidden{display:none}
 </style>
 </head>
 <body>
+  <div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
   <div class="top">
     <a href="/" class="back" title="Back to home" aria-label="Back">←</a>
     <a href="/" class="homelink">
@@ -103,7 +136,7 @@
 
     <div id="buyWrap">
       <button id="buyBtn" class="gold">Get Premium — ₹99/year</button>
-      <div class="price" style="text-align:center">Full quality · MP3 · no filename branding</div>
+      <div class="price">Full quality · MP3 · no filename branding</div>
     </div>
 
     <div id="receiptWrap" class="hidden">
@@ -120,7 +153,33 @@
     <div id="out2" class="out"></div>
   </div>
 
-  <div class="hint" style="max-width:440px">🔒 Secure payments by Razorpay · Premium follows your account across all your devices.</div>
+  <!-- GET THE APP — all platforms -->
+  <div class="card dl" style="margin-top:14px">
+    <h3>Get the app</h3>
+    <div class="sub" style="margin-bottom:6px">Download StreamGarden — sign in with the same account, Premium follows you.</div>
+    <a class="dlrow" href="/StreamGarden.apk">
+      <span class="dlic">🤖</span>
+      <span class="t"><b>Android</b><span>APK · install directly</span></span>
+      <span class="arrow">↓</span>
+    </a>
+    <a class="dlrow" href="https://github.com/Obitouchiha002/streamgarden-pc/releases/download/v1.13/StreamGarden-Setup.exe">
+      <span class="dlic">🪟</span>
+      <span class="t"><b>Windows</b><span>Installer (.exe)</span></span>
+      <span class="arrow">↓</span>
+    </a>
+    <a class="dlrow" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/download/v1.13/StreamGarden-mac-arm64.dmg">
+      <span class="dlic">🍎</span>
+      <span class="t"><b>Mac · Apple Silicon</b><span>M1/M2/M3 (.dmg)</span></span>
+      <span class="arrow">↓</span>
+    </a>
+    <a class="dlrow" href="https://github.com/Obitouchiha002/streamgarden-mac/releases/download/v1.13/StreamGarden-mac-x64.dmg">
+      <span class="dlic">🍎</span>
+      <span class="t"><b>Mac · Intel</b><span>x64 (.dmg)</span></span>
+      <span class="arrow">↓</span>
+    </a>
+  </div>
+
+  <div class="hint">🔒 Secure payments by Razorpay · Premium follows your account across all your devices.</div>
 
 <script>
 const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
@@ -155,14 +214,13 @@ async function loadStatus(){
 }
 function render(){
   const name=status?.name||session.u.email.split('@')[0];
-  const prem0=!!status?.premium;
+  const prem=!!status?.premium;
   $('welcomeHead').textContent='Welcome, '+name+' 🌱';
-  $('welcomeSub').textContent=prem0?'You’re on Premium — enjoy!':'Your StreamGarden account';
+  $('welcomeSub').textContent=prem?'You’re on Premium — enjoy!':'Your StreamGarden account';
   $('uName').textContent=name;
   $('avatar').textContent=(name[0]||'?').toUpperCase();
   $('uEmail').textContent=status?.email||session.u.email;
   $('uId').textContent=session.u.id;
-  const prem=!!status?.premium;
   $('planBadge').textContent=prem?'Premium':'Free';
   $('planBadge').className='badge '+(prem?'prem':'free');
   $('expRow').style.display=(prem&&status?.premium_until)?'flex':'none';
@@ -172,7 +230,6 @@ function render(){
   view(true);
 }
 
-// ---- auth ----
 $('googleBtn').onclick=()=>{location.href=SUPA+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(location.origin+location.pathname)};
 $('signinBtn').onclick=async()=>{
   const email=$('email').value.trim(),password=$('pw').value; if(!email||!password){show($('out1'),'Email + password daalo',false);return}
@@ -193,7 +250,6 @@ $('signupBtn').onclick=async()=>{
 };
 $('signoutBtn').onclick=()=>{session=null;status=null;lastReceipt=null;saveS();$('getapp').classList.add('hidden');view(false)};
 
-// ---- name edit ----
 $('editBtn').onclick=()=>{$('nameInput').value=status?.name||'';$('nameEdit').classList.remove('hidden')};
 $('saveNameBtn').onclick=async()=>{
   const n=$('nameInput').value.trim();if(!n)return;
@@ -201,7 +257,6 @@ $('saveNameBtn').onclick=async()=>{
   $('nameEdit').classList.add('hidden');await loadStatus();
 };
 
-// ---- buy ----
 $('buyBtn').onclick=async()=>{
   $('buyBtn').disabled=true;show($('out2'),'Opening payment…',true);
   try{
@@ -221,7 +276,6 @@ $('buyBtn').onclick=async()=>{
   }catch(e){show($('out2'),'❌ '+e.message,false);$('buyBtn').disabled=false}
 };
 
-// ---- receipt ----
 $('receiptBtn').onclick=()=>{
   const r=lastReceipt;if(!r)return;
   const txt=
@@ -238,13 +292,12 @@ Order ID:        ${r.order_id}
 Date:            ${r.date.toLocaleString('en-IN')}
 Valid till:      ${new Date(r.until).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}
 
-Thank you for supporting StreamGarden 🌱
+Thank you for supporting StreamGarden.
 streamgd.lzworth.in`;
   const blob=new Blob([txt],{type:'text/plain'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='StreamGarden-receipt-'+r.payment_id+'.txt';a.click();
 };
 
-// ---- boot: restore session (Google hash OR saved) ----
 (function(){
   const h=new URLSearchParams(location.hash.replace(/^#/,''));
   const at=h.get('access_token');
