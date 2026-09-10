@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Account + Premium test</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root{--bg:#F2F2F7;--card:#fff;--ink:#1C1C1E;--sub:#8E8E93;--accent:#007AFF;--good:#34C759;--bad:#FF3B30;--line:rgba(60,60,67,.1)}
+  @media(prefers-color-scheme:dark){:root{--bg:#000;--card:#1C1C1E;--ink:#fff;--sub:#98989F;--accent:#0A84FF;--line:rgba(255,255,255,.1)}}
+  *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,"SF Pro Text",system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;-webkit-font-smoothing:antialiased}
+  .card{background:var(--card);border-radius:20px;padding:26px;max-width:400px;width:100%;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+  h1{font-size:22px;font-weight:700;letter-spacing:-.02em}
+  .sub{color:var(--sub);font-size:13px;margin-top:4px}
+  label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--sub);margin:16px 0 6px}
+  input{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:12px 14px;font-size:16px;outline:none}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(0,122,255,.14)}
+  button{width:100%;margin-top:14px;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:600;background:var(--accent);color:#fff;cursor:pointer}
+  button:active{transform:scale(.98)} button[disabled]{opacity:.5}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+  .row{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-radius:12px;padding:12px 14px;margin-top:10px;font-size:14px}
+  .badge{font-weight:700;font-size:12px} .prem{color:#FF9500} .free{color:var(--sub)}
+  .out{margin-top:14px;font-size:13px;padding:11px 13px;border-radius:11px;display:none}
+  .out.ok{display:block;background:rgba(52,199,89,.12);color:var(--good)}
+  .out.err{display:block;background:rgba(255,59,48,.12);color:var(--bad)}
+  .hint{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.5}
+  code{background:var(--bg);padding:2px 6px;border-radius:5px;font-size:12px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🌱 Account + Premium test</h1>
+  <div class="sub">Email OTP login → plan → ₹99/year buy. Same flow as the app.</div>
+
+  <!-- Step 1: email -->
+  <div id="s_email">
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@email.com" autocomplete="email">
+    <button id="sendBtn">Send code</button>
+  </div>
+
+  <!-- Step 2: OTP -->
+  <div id="s_otp" class="hidden">
+    <label>6-digit code (email me aaya)</label>
+    <input id="otp" inputmode="numeric" placeholder="••••••" style="text-align:center;letter-spacing:6px">
+    <button id="verifyBtn">Verify & sign in</button>
+    <button id="backBtn" class="ghost">Change email</button>
+  </div>
+
+  <!-- Step 3: signed in -->
+  <div id="s_in" class="hidden">
+    <div class="row"><span>Name</span><b id="uName">—</b></div>
+    <div class="row"><span>Email</span><b id="uEmail">—</b></div>
+    <div class="row"><span>Account id</span><b id="uId" style="font-family:monospace;font-size:11px">—</b></div>
+    <div class="row"><span>Plan</span><span id="uPlan" class="badge free">Free</span></div>
+    <button id="buyBtn">Get Premium — ₹99/year</button>
+    <button id="outBtn" class="ghost">Sign out</button>
+  </div>
+
+  <div id="out" class="out"></div>
+  <div class="hint">
+    <b>Test:</b> code email pe aayega. Payment test-mode — card <code>4111 1111 1111 1111</code>, koi future date/CVV; ya UPI <code>success@razorpay</code>.
+  </div>
+</div>
+
+<script>
+const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
+const ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlZmRqYmJ6dXl6amx5cmNra3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMDIyNjYsImV4cCI6MjA5OTU3ODI2Nn0.OLJterEVLS2zIKsFv2tAZmgU0TxwXxRbfeE_sEEkHj4';
+const API='https://streamgd.lzworth.in/api';
+const $=id=>document.getElementById(id);
+const show=(m,ok)=>{const e=$('out');e.textContent=m;e.className='out '+(ok?'ok':'err')};
+let session=null;
+function step(s){['s_email','s_otp','s_in'].forEach(x=>$(x).classList.toggle('hidden',x!=='s_'+s))}
+
+async function api(path,body,token){
+  const r=await fetch(SUPA+path,{method:'POST',headers:{apikey:ANON,Authorization:'Bearer '+(token||ANON),'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return {status:r.status,data:await r.json().catch(()=>null)};
+}
+
+$('sendBtn').onclick=async()=>{
+  const email=$('email').value.trim(); if(!email)return;
+  $('sendBtn').disabled=true; show('Sending code…',true);
+  const r=await api('/auth/v1/otp',{email,create_user:true});
+  $('sendBtn').disabled=false;
+  if(r.status<400){show('Code bheja — email dekho',true);step('otp')}
+  else show('❌ '+(r.data?.msg||r.data?.error_description||'send failed'),false);
+};
+$('backBtn').onclick=()=>{step('email');$('out').className='out'};
+
+$('verifyBtn').onclick=async()=>{
+  const email=$('email').value.trim(), token=$('otp').value.trim();
+  $('verifyBtn').disabled=true; show('Verifying…',true);
+  const r=await api('/auth/v1/verify',{type:'email',email,token});
+  $('verifyBtn').disabled=false;
+  if(r.status<400&&r.data?.access_token){session={t:r.data.access_token,u:r.data.user};show('',true);await loadStatus();step('in')}
+  else show('❌ '+(r.data?.msg||r.data?.error_description||'wrong/expired code'),false);
+};
+
+async function loadStatus(){
+  const r=await api('/rest/v1/rpc/my_status',{},session.t);
+  const p=Array.isArray(r.data)?r.data[0]:r.data;
+  $('uName').textContent=p?.name||'—';
+  $('uEmail').textContent=p?.email||session.u.email;
+  $('uId').textContent=session.u.id;
+  const prem=!!p?.premium;
+  $('uPlan').textContent=prem?('Premium'+(p.premium_until?' · till '+new Date(p.premium_until).toLocaleDateString():'')):'Free';
+  $('uPlan').className='badge '+(prem?'prem':'free');
+  $('buyBtn').classList.toggle('hidden',prem);
+}
+
+$('outBtn').onclick=()=>{session=null;$('email').value='';$('otp').value='';step('email')};
+
+$('buyBtn').onclick=async()=>{
+  $('buyBtn').disabled=true; show('Opening payment…',true);
+  try{
+    const o=await(await fetch(API+'/pay-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account_id:session.u.id,app:'accounttest'})})).json();
+    if(!o.order_id)throw new Error(o.error||'order failed');
+    const rzp=new Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:o.currency,name:'StreamGarden',description:'Premium — 1 year',prefill:{email:session.u.email},theme:{color:'#007AFF'},
+      handler:async resp=>{
+        show('Verifying payment…',true);
+        const v=await(await fetch(API+'/pay-verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({razorpay_order_id:resp.razorpay_order_id,razorpay_payment_id:resp.razorpay_payment_id,razorpay_signature:resp.razorpay_signature,account_id:session.u.id})})).json();
+        if(v.ok){show('✅ Premium ON! Plan refresh ho raha…',true);await loadStatus()}else show('❌ '+(v.error||'verify failed'),false);
+        $('buyBtn').disabled=false;
+      },
+      modal:{ondismiss:()=>{show('Payment cancelled',false);$('buyBtn').disabled=false}}});
+    rzp.open();
+  }catch(e){show('❌ '+e.message,false);$('buyBtn').disabled=false}
+};
+</script>
+</body>
+</html>
