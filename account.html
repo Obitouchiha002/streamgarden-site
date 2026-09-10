@@ -106,7 +106,18 @@
     <input id="pw" type="password" placeholder="min 6 characters" autocomplete="current-password">
     <button id="signinBtn">Sign in</button>
     <button id="signupBtn" class="ghost">Create account</button>
+    <button id="forgotBtn" class="ghost" style="border:0;color:var(--sub);font-size:13px;margin-top:8px">Forgot password?</button>
     <div id="out1" class="out"></div>
+  </div>
+
+  <!-- RESET PASSWORD (shown when arriving from a reset email link) -->
+  <div id="reset_card" class="card hidden">
+    <h1>Set a new password</h1>
+    <div class="sub">Choose a new password for your account.</div>
+    <label>New password</label>
+    <input id="newpw" type="password" placeholder="min 6 characters" autocomplete="new-password">
+    <button id="setpwBtn">Save new password</button>
+    <div id="out3" class="out"></div>
   </div>
 
   <!-- SIGNED IN -->
@@ -298,9 +309,34 @@ streamgd.lzworth.in`;
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='StreamGarden-receipt-'+r.payment_id+'.txt';a.click();
 };
 
+let recoveryToken='';
+$('forgotBtn').onclick=async()=>{
+  const email=$('email').value.trim(); if(!email){show($('out1'),'Pehle apna email daalo',false);return}
+  $('forgotBtn').disabled=true;show($('out1'),'Sending reset link…',true);
+  const r=await api('/auth/v1/recover',{email,redirect_to:location.origin+location.pathname});
+  $('forgotBtn').disabled=false;
+  if(r.status<400){$('out1').className='out ok';$('out1').textContent='✅ Reset link sent — open the email and set a new password.';}
+  else show($('out1'),'❌ '+(r.data?.msg||r.data?.error_description||'Could not send reset'),false);
+};
+$('setpwBtn').onclick=async()=>{
+  const pw=$('newpw').value; if(pw.length<6){show($('out3'),'Min 6 characters',false);return}
+  $('setpwBtn').disabled=true;show($('out3'),'Saving…',true);
+  const r=await fetch(SUPA+'/auth/v1/user',{method:'PUT',headers:{apikey:ANON,Authorization:'Bearer '+recoveryToken,'Content-Type':'application/json'},body:JSON.stringify({password:pw})});
+  $('setpwBtn').disabled=false;
+  if(r.ok){show($('out3'),'✅ Password changed — now sign in.',true);setTimeout(()=>{$('reset_card').classList.add('hidden');view(false);},1600);}
+  else{const d=await r.json().catch(()=>({}));show($('out3'),'❌ '+(d.msg||'Failed — request a new reset link'),false);}
+};
+
 (function(){
   const h=new URLSearchParams(location.hash.replace(/^#/,''));
   const at=h.get('access_token');
+  // Arriving from a password-reset email: show the "set new password" form.
+  if(at && h.get('type')==='recovery'){
+    history.replaceState(null,'',location.pathname);
+    recoveryToken=at;
+    $('out_card').classList.add('hidden');$('in_card').classList.add('hidden');$('reset_card').classList.remove('hidden');
+    return;
+  }
   if(at){
     history.replaceState(null,'',location.pathname);
     let uid='',email='';try{const p=JSON.parse(atob(at.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));uid=p.sub;email=p.email||''}catch(e){}
