@@ -35,11 +35,16 @@
   <h1>🌱 Account + Premium test</h1>
   <div class="sub">Email OTP login → plan → ₹99/year buy. Same flow as the app.</div>
 
-  <!-- Step 1: email -->
+  <!-- Step 1: sign in -->
   <div id="s_email">
-    <label>Email</label>
+    <button id="googleBtn" style="background:#fff;color:#1C1C1E;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:10px">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.1 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.8 6c1.9-5.6 7.1-9.8 13.7-9.8z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9.1h12.4c-.5 2.9-2.1 5.3-4.6 7l7.1 5.5c4.2-3.9 6.2-9.6 6.2-17z"/><path fill="#FBBC05" d="M10.3 28.7c-.5-1.4-.7-2.9-.7-4.7s.3-3.3.7-4.7l-7.8-6C1 16.6 0 20.2 0 24s1 7.4 2.5 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.1 0 11.3-2 15-5.5l-7.1-5.5c-2 1.4-4.6 2.2-7.9 2.2-6.6 0-11.8-4.2-13.7-9.8l-7.8 6C6.4 42.6 14.6 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div style="text-align:center;color:var(--sub);font-size:12px;margin:12px 0 2px">— ya email —</div>
+    <label>Email (code SMTP setup ke baad)</label>
     <input id="email" type="email" placeholder="you@email.com" autocomplete="email">
-    <button id="sendBtn">Send code</button>
+    <button id="sendBtn" class="ghost">Send code</button>
   </div>
 
   <!-- Step 2: OTP -->
@@ -74,6 +79,23 @@ const $=id=>document.getElementById(id);
 const show=(m,ok)=>{const e=$('out');e.textContent=m;e.className='out '+(ok?'ok':'err')};
 let session=null;
 function step(s){['s_email','s_otp','s_in'].forEach(x=>$(x).classList.toggle('hidden',x!=='s_'+s))}
+
+// Google sign-in — redirect out to Google, come back with the token in the URL hash.
+$('googleBtn').onclick=()=>{
+  const redirect=encodeURIComponent(location.origin+location.pathname);
+  location.href=SUPA+'/auth/v1/authorize?provider=google&redirect_to='+redirect;
+};
+// On return from Google (or a magic link), the session token is in location.hash — pick it up.
+(function(){
+  const h=new URLSearchParams(location.hash.replace(/^#/,''));
+  const at=h.get('access_token');
+  if(!at)return;
+  history.replaceState(null,'',location.pathname);
+  let uid='',email='';
+  try{const p=JSON.parse(atob(at.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));uid=p.sub;email=p.email||'';}catch(e){}
+  session={t:at,u:{id:uid,email}};
+  loadStatus().then(()=>step('in'));
+})();
 
 async function api(path,body,token){
   const r=await fetch(SUPA+path,{method:'POST',headers:{apikey:ANON,Authorization:'Bearer '+(token||ANON),'Content-Type':'application/json'},body:JSON.stringify(body)});
