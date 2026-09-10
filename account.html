@@ -72,6 +72,8 @@
 
   <!-- SIGNED IN -->
   <div id="in_card" class="card hidden">
+    <h1 id="welcomeHead" style="margin-bottom:4px">Welcome 🌱</h1>
+    <div class="sub" id="welcomeSub" style="margin-bottom:16px">Your StreamGarden account</div>
     <div class="namebox">
       <div class="avatar" id="avatar">?</div>
       <div style="flex:1;min-width:0">
@@ -147,6 +149,9 @@ async function loadStatus(){
 }
 function render(){
   const name=status?.name||session.u.email.split('@')[0];
+  const prem0=!!status?.premium;
+  $('welcomeHead').textContent='Welcome, '+name+' 🌱';
+  $('welcomeSub').textContent=prem0?'You’re on Premium — enjoy!':'Your StreamGarden account';
   $('uName').textContent=name;
   $('avatar').textContent=(name[0]||'?').toUpperCase();
   $('uEmail').textContent=status?.email||session.u.email;
