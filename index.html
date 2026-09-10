@@ -92,6 +92,17 @@
 </head>
 <body>
 
+<!-- Password-reset links can land on the homepage (Supabase Site URL) instead of the
+     account page. If we see a recovery token here, forward it to account.html intact. -->
+<script>
+(function(){
+  var h=location.hash||'', q=location.search||'';
+  if((h+q).indexOf('type=recovery')>-1||(h+q).indexOf('access_token=')>-1||/[?#].*code=/.test(h+q)){
+    location.replace('/account.html'+q+h);
+  }
+})();
+</script>
+
 <!-- ═══════════════ header ═══════════════ -->
 <header id="hdr">
   <div class="wrap bar">

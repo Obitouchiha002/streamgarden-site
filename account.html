@@ -328,10 +328,23 @@ $('setpwBtn').onclick=async()=>{
 };
 
 (function(){
+  // Tokens can arrive in the hash (#access_token=…&type=recovery) or, depending on the
+  // Supabase flow, in the query (?access_token=… / ?error=…). Read both.
   const h=new URLSearchParams(location.hash.replace(/^#/,''));
-  const at=h.get('access_token');
+  const q=new URLSearchParams(location.search.replace(/^\?/,''));
+  const get=(k)=>h.get(k)||q.get(k);
+  const at=get('access_token');
+  const type=get('type');
+  const err=get('error_description')||get('error');
+  // Expired / already-used reset link: tell the user instead of silently doing nothing.
+  if(err && (type==='recovery'||get('error_code'))){
+    history.replaceState(null,'',location.pathname);
+    $('out_card').classList.add('hidden');$('in_card').classList.remove('hidden');
+    show($('out1'),'❌ '+decodeURIComponent(err)+' — request a new reset link below.',false);
+    return;
+  }
   // Arriving from a password-reset email: show the "set new password" form.
-  if(at && h.get('type')==='recovery'){
+  if(at && type==='recovery'){
     history.replaceState(null,'',location.pathname);
     recoveryToken=at;
     $('out_card').classList.add('hidden');$('in_card').classList.add('hidden');$('reset_card').classList.remove('hidden');
