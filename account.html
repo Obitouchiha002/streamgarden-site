@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StreamGarden — Account</title>
+<meta name="description" content="Sign in to StreamGarden, manage your Premium plan and download the app.">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<style>
+  :root{--bg:#F2F2F7;--card:#fff;--ink:#1C1C1E;--sub:#8E8E93;--accent:#5A5A40;--accent2:#8B9B6A;--good:#34C759;--bad:#FF3B30;--gold:#B7791F;--line:rgba(60,60,67,.1)}
+  @media(prefers-color-scheme:dark){:root{--bg:#0A0C07;--card:#17170F;--ink:#F2F1E8;--sub:#98988F;--line:rgba(255,255,255,.1)}}
+  *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+  body{background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"SF Pro Text",system-ui,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
+  .top{width:100%;max-width:440px;display:flex;align-items:center;gap:10px;margin-bottom:18px}
+  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center}
+  .brand{font-weight:700;font-size:18px;letter-spacing:-.02em}
+  .card{background:var(--card);border-radius:20px;padding:24px;max-width:440px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+  h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+  .sub{color:var(--sub);font-size:14px;margin-top:4px}
+  label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;color:var(--sub);letter-spacing:.02em;margin:16px 0 6px}
+  input{width:100%;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:13px 14px;font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s}
+  input:focus{border-color:var(--accent2);box-shadow:0 0 0 3.5px rgba(139,155,106,.18)}
+  button{width:100%;margin-top:12px;border:0;border-radius:13px;padding:14px;font-size:16px;font-weight:600;background:var(--accent);color:#fff;cursor:pointer;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:9px}
+  button:active{transform:scale(.98);opacity:.9} button[disabled]{opacity:.5}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+  button.google{background:#fff;color:#1C1C1E;border:1px solid var(--line)}
+  button.gold{background:var(--gold)}
+  .divider{display:flex;align-items:center;gap:12px;color:var(--sub);font-size:12px;margin:16px 0 4px}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--line);font-size:15px}
+  .row:last-of-type{border-bottom:0}
+  .row .k{color:var(--sub);font-size:13px} .row .v{font-weight:600;text-align:right;word-break:break-word;max-width:60%}
+  .badge{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px}
+  .badge.prem{background:rgba(183,121,31,.14);color:var(--gold)} .badge.free{background:rgba(120,120,128,.14);color:var(--sub)}
+  .out{margin-top:14px;font-size:14px;padding:12px 14px;border-radius:12px;display:none}
+  .out.ok{display:block;background:rgba(52,199,89,.12);color:var(--good)}
+  .out.err{display:block;background:rgba(255,59,48,.12);color:var(--bad)}
+  .hint{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.5}
+  .price{font-size:15px;color:var(--sub);margin-top:2px}
+  .avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#AEC98A,#5A5A40);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;flex-shrink:0}
+  .namebox{display:flex;align-items:center;gap:13px;margin-bottom:4px}
+  .pencil{background:none;border:0;padding:6px;width:auto;margin:0;color:var(--sub);cursor:pointer}
+  .getapp{margin-top:16px;padding:16px;background:var(--bg);border-radius:14px}
+  .getapp h3{font-size:15px;font-weight:700} .getapp p{font-size:13px;color:var(--sub);margin-top:3px}
+  a.applink{display:block;text-align:center;margin-top:10px;background:var(--accent);color:#fff;text-decoration:none;border-radius:11px;padding:12px;font-weight:600;font-size:15px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <div class="top">
+    <span class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0A0C07" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 21h14"/></svg></span>
+    <span class="brand">StreamGarden</span>
+  </div>
+
+  <!-- SIGNED OUT -->
+  <div id="out_card" class="card">
+    <h1>Sign in</h1>
+    <div class="sub">Premium aapke account se judega — kisi bhi device par.</div>
+    <button class="google" id="googleBtn">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.4 30.1 0 24 0 14.6 0 6.4 5.4 2.5 13.3l7.8 6c1.9-5.6 7.1-9.8 13.7-9.8z"/><path fill="#4285F4" d="M46.1 24.6c0-1.6-.1-3.1-.4-4.6H24v9.1h12.4c-.5 2.9-2.1 5.3-4.6 7l7.1 5.5c4.2-3.9 6.2-9.6 6.2-17z"/><path fill="#FBBC05" d="M10.3 28.7c-.5-1.4-.7-2.9-.7-4.7s.3-3.3.7-4.7l-7.8-6C1 16.6 0 20.2 0 24s1 7.4 2.5 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.1 0 11.3-2 15-5.5l-7.1-5.5c-2 1.4-4.6 2.2-7.9 2.2-6.6 0-11.8-4.2-13.7-9.8l-7.8 6C6.4 42.6 14.6 48 24 48z"/></svg>
+      Continue with Google
+    </button>
+    <div class="divider">or email</div>
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@email.com" autocomplete="email">
+    <label>Password</label>
+    <input id="pw" type="password" placeholder="min 6 characters" autocomplete="current-password">
+    <button id="signinBtn">Sign in</button>
+    <button id="signupBtn" class="ghost">Create account</button>
+    <div id="out1" class="out"></div>
+  </div>
+
+  <!-- SIGNED IN -->
+  <div id="in_card" class="card hidden">
+    <div class="namebox">
+      <div class="avatar" id="avatar">?</div>
+      <div style="flex:1;min-width:0">
+        <div id="nameRow" style="display:flex;align-items:center;gap:6px">
+          <b id="uName" style="font-size:18px">You</b>
+          <button class="pencil" id="editBtn" title="Edit name">✏️</button>
+        </div>
+        <div class="sub" id="uEmail" style="margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></div>
+      </div>
+    </div>
+    <div id="nameEdit" class="hidden">
+      <input id="nameInput" placeholder="Your name" maxlength="40">
+      <button id="saveNameBtn">Save name</button>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="row"><span class="k">Plan</span><span class="v"><span id="planBadge" class="badge free">Free</span></span></div>
+      <div class="row" id="expRow" style="display:none"><span class="k">Valid till</span><span class="v" id="expDate">—</span></div>
+      <div class="row"><span class="k">Account id</span><span class="v" style="font-family:ui-monospace,monospace;font-size:12px" id="uId">—</span></div>
+    </div>
+
+    <div id="buyWrap">
+      <button id="buyBtn" class="gold">Get Premium — ₹99/year</button>
+      <div class="price" style="text-align:center">Full quality · MP3 · no filename branding</div>
+    </div>
+
+    <div id="receiptWrap" class="hidden">
+      <button id="receiptBtn" class="ghost">Download receipt</button>
+    </div>
+
+    <button id="signoutBtn" class="ghost" style="margin-top:14px">Sign out</button>
+
+    <div id="getapp" class="getapp hidden">
+      <h3>🎉 Premium active!</h3>
+      <p>Ab StreamGarden app me isi email se sign in karo — Premium turant unlock.</p>
+      <a class="applink" href="/StreamGarden.apk">📥 Download the Android app</a>
+    </div>
+    <div id="out2" class="out"></div>
+  </div>
+
+  <div class="hint" style="max-width:440px">🔒 Secure payments by Razorpay · Premium follows your account across all your devices.</div>
+
+<script>
+const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
+const ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJlZmRqYmJ6dXl6amx5cmNra3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwMDIyNjYsImV4cCI6MjA5OTU3ODI2Nn0.OLJterEVLS2zIKsFv2tAZmgU0TxwXxRbfeE_sEEkHj4';
+const API='https://streamgd.lzworth.in/api';
+const KEY='sg_web_session';
+const $=id=>document.getElementById(id);
+let session=null, status=null, lastReceipt=null;
+
+function saveS(){try{session?localStorage.setItem(KEY,JSON.stringify(session)):localStorage.removeItem(KEY)}catch(e){}}
+function loadS(){try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):null}catch(e){return null}}
+function show(el,m,ok){el.textContent=m;el.className='out '+(ok?'ok':'err')}
+function view(signedIn){$('out_card').classList.toggle('hidden',signedIn);$('in_card').classList.toggle('hidden',!signedIn)}
+
+async function api(path,body,token){
+  const r=await fetch(SUPA+path,{method:'POST',headers:{apikey:ANON,Authorization:'Bearer '+(token||ANON),'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return{status:r.status,data:await r.json().catch(()=>null)};
+}
+function setSession(d){session={t:d.access_token,r:d.refresh_token,u:{id:d.user.id,email:d.user.email}};saveS()}
+
+async function refresh(){
+  if(!session?.r)return false;
+  const r=await api('/auth/v1/token?grant_type=refresh_token',{refresh_token:session.r});
+  if(r.status<400&&r.data?.access_token){setSession({...r.data,user:session.u});return true}
+  return false;
+}
+async function loadStatus(){
+  let r=await api('/rest/v1/rpc/my_status',{},session.t);
+  if(r.status===401&&await refresh())r=await api('/rest/v1/rpc/my_status',{},session.t);
+  status=Array.isArray(r.data)?r.data[0]:r.data;
+  render();
+}
+function render(){
+  const name=status?.name||session.u.email.split('@')[0];
+  $('uName').textContent=name;
+  $('avatar').textContent=(name[0]||'?').toUpperCase();
+  $('uEmail').textContent=status?.email||session.u.email;
+  $('uId').textContent=session.u.id;
+  const prem=!!status?.premium;
+  $('planBadge').textContent=prem?'Premium':'Free';
+  $('planBadge').className='badge '+(prem?'prem':'free');
+  $('expRow').style.display=(prem&&status?.premium_until)?'flex':'none';
+  if(prem&&status?.premium_until)$('expDate').textContent=new Date(status.premium_until).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  $('buyWrap').classList.toggle('hidden',prem);
+  $('receiptWrap').classList.toggle('hidden',!prem||!lastReceipt);
+  view(true);
+}
+
+// ---- auth ----
+$('googleBtn').onclick=()=>{location.href=SUPA+'/auth/v1/authorize?provider=google&redirect_to='+encodeURIComponent(location.origin+location.pathname)};
+$('signinBtn').onclick=async()=>{
+  const email=$('email').value.trim(),password=$('pw').value; if(!email||!password){show($('out1'),'Email + password daalo',false);return}
+  $('signinBtn').disabled=true;show($('out1'),'Signing in…',true);
+  const r=await api('/auth/v1/token?grant_type=password',{email,password});
+  $('signinBtn').disabled=false;
+  if(r.status<400&&r.data?.access_token){setSession(r.data);$('out1').className='out';await loadStatus()}
+  else show($('out1'),'❌ '+(r.data?.error_description||r.data?.msg||'Wrong email or password'),false);
+};
+$('signupBtn').onclick=async()=>{
+  const email=$('email').value.trim(),password=$('pw').value; if(!email||password.length<6){show($('out1'),'Email + 6+ char password',false);return}
+  $('signupBtn').disabled=true;show($('out1'),'Creating account…',true);
+  const r=await api('/auth/v1/signup',{email,password});
+  $('signupBtn').disabled=false;
+  if(r.status<400&&r.data?.access_token){setSession(r.data);$('out1').className='out';await loadStatus()}
+  else if(r.status<400)show($('out1'),'Account bana — Supabase me "Confirm email" OFF karo, phir Sign in',false);
+  else show($('out1'),'❌ '+(r.data?.msg||r.data?.error_description||'Signup failed'),false);
+};
+$('signoutBtn').onclick=()=>{session=null;status=null;lastReceipt=null;saveS();$('getapp').classList.add('hidden');view(false)};
+
+// ---- name edit ----
+$('editBtn').onclick=()=>{$('nameInput').value=status?.name||'';$('nameEdit').classList.remove('hidden')};
+$('saveNameBtn').onclick=async()=>{
+  const n=$('nameInput').value.trim();if(!n)return;
+  await api('/rest/v1/rpc/set_my_name',{p_name:n},session.t);
+  $('nameEdit').classList.add('hidden');await loadStatus();
+};
+
+// ---- buy ----
+$('buyBtn').onclick=async()=>{
+  $('buyBtn').disabled=true;show($('out2'),'Opening payment…',true);
+  try{
+    const o=await(await fetch(API+'/pay-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account_id:session.u.id,app:'web'})})).json();
+    if(!o.order_id)throw new Error(o.error||'order failed');
+    new Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:o.currency,name:'StreamGarden',description:'Premium — 1 year',prefill:{email:session.u.email},theme:{color:'#5A5A40'},
+      handler:async resp=>{
+        show($('out2'),'Verifying payment…',true);
+        const v=await(await fetch(API+'/pay-verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({razorpay_order_id:resp.razorpay_order_id,razorpay_payment_id:resp.razorpay_payment_id,razorpay_signature:resp.razorpay_signature,account_id:session.u.id})})).json();
+        if(v.ok){
+          lastReceipt={payment_id:resp.razorpay_payment_id,order_id:resp.razorpay_order_id,amount:o.amount/100,email:session.u.email,date:new Date(),until:v.premium_until};
+          $('out2').className='out';await loadStatus();$('getapp').classList.remove('hidden');
+        }else show($('out2'),'❌ '+(v.error||'verify failed'),false);
+        $('buyBtn').disabled=false;
+      },
+      modal:{ondismiss:()=>{show($('out2'),'Payment cancelled',false);$('buyBtn').disabled=false}}}).open();
+  }catch(e){show($('out2'),'❌ '+e.message,false);$('buyBtn').disabled=false}
+};
+
+// ---- receipt ----
+$('receiptBtn').onclick=()=>{
+  const r=lastReceipt;if(!r)return;
+  const txt=
+`STREAMGARDEN — PAYMENT RECEIPT
+================================
+
+Plan:            Premium (1 year)
+Amount:          Rs ${r.amount}.00
+Status:          PAID
+
+Email:           ${r.email}
+Payment ID:      ${r.payment_id}
+Order ID:        ${r.order_id}
+Date:            ${r.date.toLocaleString('en-IN')}
+Valid till:      ${new Date(r.until).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}
+
+Thank you for supporting StreamGarden 🌱
+streamgd.lzworth.in`;
+  const blob=new Blob([txt],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='StreamGarden-receipt-'+r.payment_id+'.txt';a.click();
+};
+
+// ---- boot: restore session (Google hash OR saved) ----
+(function(){
+  const h=new URLSearchParams(location.hash.replace(/^#/,''));
+  const at=h.get('access_token');
+  if(at){
+    history.replaceState(null,'',location.pathname);
+    let uid='',email='';try{const p=JSON.parse(atob(at.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));uid=p.sub;email=p.email||''}catch(e){}
+    session={t:at,r:h.get('refresh_token')||'',u:{id:uid,email}};saveS();
+    loadStatus();return;
+  }
+  session=loadS();
+  if(session)loadStatus(); else view(false);
+})();
+</script>
+</body>
+</html>
