@@ -21,7 +21,10 @@ export default async function handler(req, res) {
   const b = req.body || {};
   const orderId = b.razorpay_order_id, payId = b.razorpay_payment_id, sig = b.razorpay_signature;
   const deviceId = b.device_id;
-  if (!orderId || !payId || !sig || !deviceId) return res.status(400).json({ error: 'Missing fields' });
+  const accountId = b.account_id;   // the signed-in user's id (uuid) — premium follows the account
+  if (!orderId || !payId || !sig || (!deviceId && !accountId)) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
 
   // Razorpay signs `order_id|payment_id` with your key_secret. Recompute and compare — a wrong
   // or forged signature means the payment did not really happen.
@@ -31,10 +34,14 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Payment could not be verified' });
   }
 
-  // Genuine payment → grant 1 year of premium on this device.
+  // Genuine payment → grant 1 year of premium. Prefer the ACCOUNT (premium then follows the
+  // user's email across every device); fall back to the device if no account was signed in.
   const until = new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString();
+  const target = accountId
+    ? `profiles?id=eq.${encodeURIComponent(accountId)}`
+    : `devices?id=eq.${encodeURIComponent(deviceId)}`;
   try {
-    const r = await fetch(`${SUPA}/rest/v1/devices?id=eq.${encodeURIComponent(deviceId)}`, {
+    const r = await fetch(`${SUPA}/rest/v1/${target}`, {
       method: 'PATCH',
       headers: {
         apikey: SERVICE, Authorization: `Bearer ${SERVICE}`,
@@ -46,10 +53,10 @@ export default async function handler(req, res) {
     const rows = await r.json().catch(() => []);
     if (!r.ok) return res.status(502).json({ error: 'Paid, but activating premium failed — contact support' });
     if (!Array.isArray(rows) || rows.length === 0) {
-      // Device row not found (hasn't checked in). Rare — the app checks in on launch.
-      return res.status(200).json({ ok: true, premium: true, premium_until: until, note: 'reopen the app to sync' });
+      // Row not found (account/device not registered yet). Rare — happens on launch/first login.
+      return res.status(200).json({ ok: true, premium: true, premium_until: until, note: 'reopen/re-login to sync' });
     }
-    return res.status(200).json({ ok: true, premium: true, premium_until: until });
+    return res.status(200).json({ ok: true, premium: true, premium_until: until, scope: accountId ? 'account' : 'device' });
   } catch (e) {
     return res.status(502).json({ error: 'Paid, but activating premium failed — contact support' });
   }

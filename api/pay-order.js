@@ -17,6 +17,7 @@ export default async function handler(req, res) {
 
   const device = String((req.body && req.body.device_id) || 'unknown').slice(0, 40);
   const app = String((req.body && req.body.app) || '').slice(0, 30);
+  const account = String((req.body && req.body.account_id) || '').slice(0, 40);
   try {
     const auth = Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString('base64');
     const r = await fetch('https://api.razorpay.com/v1/orders', {
@@ -26,7 +27,7 @@ export default async function handler(req, res) {
         amount: AMOUNT_PAISE,
         currency: 'INR',
         receipt: `sg_${device}_${Date.now()}`.slice(0, 40),
-        notes: { device, app, plan: 'premium-1yr' },
+        notes: { device, app, account, plan: 'premium-1yr' },
       }),
       signal: AbortSignal.timeout(9000),
     });
