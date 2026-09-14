@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>StreamGarden — Free Video &amp; Audio Downloader for Android, Windows &amp; Mac</title>
-<meta name="description" content="StreamGarden is a free, open-source video and audio downloader for Android, Windows and Mac. Save from YouTube, Instagram, TikTok, Facebook and more — every quality up to 4K, real MP3 with cover art. No ads, no tracking." />
+<meta name="description" content="StreamGarden is a free, open-source video and audio downloader for Android, Windows and Mac. Save from YouTube, Instagram, TikTok, Facebook and more — every quality up to 4K, real MP3 with cover art. Free forever — go Premium to remove ads." />
 <meta name="keywords" content="StreamGarden, streamgd, video downloader, audio downloader, YouTube downloader, Instagram downloader, TikTok downloader, MP3 downloader, 4K downloader, Android, Windows, Mac, free, open source" />
 <meta name="author" content="Vansh Kashyap" />
 <meta name="monetag" content="d1b7d76217ab1a507c1bd36895297cc0" />
@@ -451,5 +451,10 @@
   }).catch(function () {});
 })();
 </script>
+
+<!-- Monetag ad tag (homepage only — never on the account/checkout page). Keep this clean:
+     in the Monetag dashboard for zone 280294, turn OFF Popunder, Interstitial/Vignette and
+     Push, and keep only Native Banner / In-Page so it never blocks or interrupts the user. -->
+<script src="https://quge5.com/88/tag.min.js" data-zone="280294" async data-cfasync="false"></script>
 </body>
 </html>
