@@ -190,7 +190,7 @@
     </a>
   </div>
 
-  <div class="hint">🔒 Secure payments by Razorpay · Premium follows your account across all your devices.</div>
+  <div class="hint">💬 Tap “Get Premium” to message us on WhatsApp — after payment we activate Premium on your account (works across all your devices).</div>
 
   <div class="hint" style="margin-top:4px">
     By buying Premium you agree to our
@@ -276,23 +276,15 @@ $('saveNameBtn').onclick=async()=>{
   $('nameEdit').classList.add('hidden');await loadStatus();
 };
 
-$('buyBtn').onclick=async()=>{
-  $('buyBtn').disabled=true;show($('out2'),'Opening payment…',true);
-  try{
-    const o=await(await fetch(API+'/pay-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({account_id:session.u.id,app:'web'})})).json();
-    if(!o.order_id)throw new Error(o.error||'order failed');
-    new Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:o.currency,name:'StreamGarden',description:'Premium — 1 year',prefill:{email:session.u.email},theme:{color:'#5A5A40'},
-      handler:async resp=>{
-        show($('out2'),'Verifying payment…',true);
-        const v=await(await fetch(API+'/pay-verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({razorpay_order_id:resp.razorpay_order_id,razorpay_payment_id:resp.razorpay_payment_id,razorpay_signature:resp.razorpay_signature,account_id:session.u.id})})).json();
-        if(v.ok){
-          lastReceipt={payment_id:resp.razorpay_payment_id,order_id:resp.razorpay_order_id,amount:o.amount/100,email:session.u.email,date:new Date(),until:v.premium_until};
-          $('out2').className='out';await loadStatus();$('getapp').classList.remove('hidden');
-        }else show($('out2'),'❌ '+(v.error||'verify failed'),false);
-        $('buyBtn').disabled=false;
-      },
-      modal:{ondismiss:()=>{show($('out2'),'Payment cancelled',false);$('buyBtn').disabled=false}}}).open();
-  }catch(e){show($('out2'),'❌ '+e.message,false);$('buyBtn').disabled=false}
+// Premium is sold manually over WhatsApp: open a chat pre-filled with the buyer's account email,
+// so we can take payment and then grant permanent premium from the admin panel.
+const WHATSAPP_NUMBER='918800628376';
+$('buyBtn').onclick=()=>{
+  const email=session?.u?.email||'';
+  if(!email){show($('out2'),'Pehle sign in karo',false);return}
+  const text=encodeURIComponent(`Hi! I want StreamGarden Premium (₹99/year).\n\nEmail: ${email}`);
+  window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+text,'_blank');
+  show($('out2'),'✅ WhatsApp par apni detail bhej do — payment ke baad Premium activate ho jayega.',true);
 };
 
 $('receiptBtn').onclick=()=>{
