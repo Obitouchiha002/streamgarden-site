@@ -3,6 +3,9 @@
   "crons": [
     { "path": "/api/keepalive", "schedule": "17 6 * * *" }
   ],
+  "rewrites": [
+    { "source": "/app", "destination": "/app.html" }
+  ],
   "headers": [
     {
       "source": "/StreamGarden.apk",
