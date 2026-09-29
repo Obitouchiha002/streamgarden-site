@@ -51,6 +51,16 @@ export default async function handler(req, res) {
   catch { return res.status(502).send('Source unavailable, please retry.'); }
   if (!up.ok || !up.body) return res.status(502).send('Source error ' + up.status);
 
+  // Peek the first chunk BEFORE committing to a 200. Some YouTube videos resolve to a tunnel but
+  // then stream nothing (YouTube blocks the resolver's IP for that video) — we must not hand the
+  // browser a 0-byte "success". If the stream is empty, return a real error instead.
+  const reader = up.body.getReader();
+  let first;
+  try { first = await reader.read(); } catch { first = { done: true }; }
+  if (first.done || !first.value || first.value.length === 0) {
+    return res.status(502).json({ error: 'This video could not be fetched (the source is blocking it). Try a different quality, or another video.' });
+  }
+
   const fn = (t.filename || (audio ? 'audio.mp3' : 'video.mp4')).replace(/["\\\r\n]/g, '');
   // No Content-Length: the resolver only gives an *estimate*, and a wrong length truncates the
   // download. Chunked (attachment) is handled fine by browsers.
@@ -58,8 +68,7 @@ export default async function handler(req, res) {
   res.setHeader('Content-Type', up.headers.get('content-type') || (audio ? 'audio/mpeg' : 'video/mp4'));
   res.setHeader('Cache-Control', 'no-store');
   res.status(200);
-
-  const reader = up.body.getReader();
+  res.write(Buffer.from(first.value));
   try {
     for (;;) {
       const { done, value } = await reader.read();

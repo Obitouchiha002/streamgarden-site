@@ -223,7 +223,7 @@
   <button class="ghost" id="closeSheet">Maybe later</button>
 </div></div>
 
-<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 6</span></footer>
+<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 7</span></footer>
 
 <script>
 const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
@@ -300,13 +300,25 @@ $('qgrid').addEventListener('click',async e=>{
 function switchTab(name){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.pane===name));document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+name));}
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)switchTab(t.dataset.pane);});
 
-// Same-origin download — the browser's own download manager handles it (reliable, no buffering).
-function triggerDownload(u){const a=document.createElement('a');a.href=u;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),2000);}
-function doDownload(key){
+// Download by fetching our OWN proxy (same-origin — never blocked), streaming with a live size,
+// and detecting the empty/blocked case so the user sees a real error instead of a 0-byte file.
+async function doDownload(key){
   if(locked(key)){openSheet();return;}
   setDirect(key==='mp3'?'audio':'video');
-  triggerDownload(dlUrl(key));
-  show('⬇️ Download started — it prepares for a few seconds, then saves to your Downloads.','ok');
+  const btn=key==='mp3'?$('aDl'):$('vDl');const t=btn.querySelector('span')||btn;const old=t.textContent;
+  btn.disabled=true;t.innerHTML='<span class="spin dspin"></span> Preparing…';
+  try{
+    const r=await fetch(dlUrl(key));
+    if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.error||('HTTP '+r.status));}
+    const cd=r.headers.get('content-disposition')||'';const m=/filename="?([^"]+)"?/.exec(cd);const fn=m?m[1]:(key==='mp3'?'audio.mp3':'video.mp4');
+    const reader=r.body.getReader();const chunks=[];let got=0;
+    for(;;){const{done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.length;t.innerHTML='<span class="spin dspin"></span> '+(fmtSize(got)||'…');}
+    if(got<1)throw new Error('empty');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(chunks));a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    show('✅ Saved '+fmtSize(got)+' — check your Downloads folder.','ok');
+  }catch(e){
+    show('❌ '+(e.message==='empty'?'This video could not be fetched — try another quality or video.':(e.message||'Download failed')),'err');
+  }finally{btn.disabled=false;t.textContent=old;}
 }
 $('vDl').onclick=()=>doDownload(quality);
 $('aDl').onclick=()=>doDownload('mp3');
