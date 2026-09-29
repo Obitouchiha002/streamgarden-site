@@ -30,10 +30,20 @@ async function oembed(pageUrl) {
       const r = await fetch(ep, { signal: AbortSignal.timeout(4000) });
       if (!r.ok) continue;
       const j = await r.json();
-      if (j && (j.title || j.thumbnail_url)) return { title: j.title || '', thumbnail: j.thumbnail_url || '' };
+      if (j && (j.title || j.thumbnail_url)) return { title: j.title || '', thumbnail: j.thumbnail_url || '', author: j.author_name || '' };
     } catch { /* try next */ }
   }
   return null;
+}
+
+// Best-effort file size for the resolved tunnel (Cobalt streams, so it usually reports only an
+// "estimated-content-length"). Returns bytes or null; never throws.
+async function tunnelSize(u) {
+  try {
+    const r = await fetch(u, { method: 'HEAD', signal: AbortSignal.timeout(8000) });
+    const s = r.headers.get('content-length') || r.headers.get('estimated-content-length');
+    return s ? Number(s) : null;
+  } catch { return null; }
 }
 
 export default async function handler(req, res) {
@@ -66,10 +76,10 @@ export default async function handler(req, res) {
       // The web app runs on https, so an http:// tunnel is mixed-content and the browser blocks
       // the download. Only accept https URLs; otherwise fall through to the next instance.
       if ((j.status === 'tunnel' || j.status === 'redirect') && j.url && /^https:\/\//i.test(j.url)) {
-        const meta = await oembed(url);
+        const [meta, size] = await Promise.all([oembed(url), tunnelSize(j.url)]);
         return res.status(200).json({
           ok: true,
-          download: { url: j.url, filename: j.filename || `download.${audio ? 'mp3' : 'mp4'}` },
+          download: { url: j.url, filename: j.filename || `download.${audio ? 'mp3' : 'mp4'}`, size },
           meta,
         });
       }
