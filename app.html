@@ -242,7 +242,7 @@ const cache={}; // key ('360'/'720'/'1080'/'max'/'mp3') -> {url,filename,size}
     if(row){userEmail=row.email||userEmail; if(row.premium){isPremium=true;$('acctLink').textContent='⭐ Premium';}}}catch(e){}
 })();
 
-const fmtSize=b=>!b?'':b>=1073741824?(b/1073741824).toFixed(2)+' GB':(b/1048576).toFixed(1)+' MB';
+const fmtSize=b=>(!b||b<=0)?'':b>=1073741824?(b/1073741824).toFixed(2)+' GB':(b/1048576).toFixed(1)+' MB';
 const qLabel=q=>q==='max'?'4K':q+'p';
 const locked=q=>LOCK_HD&&!isPremium&&(q==='1080'||q==='max'||q==='mp3');
 function show(m,cls){const o=$('out');o.innerHTML=m;o.className='out '+(cls||'');}
@@ -251,15 +251,18 @@ function openSheet(){const t=encodeURIComponent('Hi! I want StreamGarden Premium
 $('closeSheet').onclick=()=>$('sheet').style.display='none';
 $('sheet').addEventListener('click',e=>{if(e.target===$('sheet'))$('sheet').style.display='none'});
 
-// resolve one key (cached). Captures meta on first success.
+// resolve one key. Cobalt tunnels expire in ~1-2 min, so a cached link is only reused while it is
+// still fresh (< 55s) — otherwise we re-resolve so a download never hits a dead/expired tunnel.
 async function resolveFor(key){
-  if(cache[key]) return cache[key];
+  const c=cache[key];
+  if(c && (Date.now()-c.ts) < 55000) return c;
   const audio=key==='mp3';
   const r=await fetch('/api/resolve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:curUrl,quality:audio?'720':key,audio})});
   const j=await r.json();
   if(!j.ok) throw new Error(j.error||'Could not fetch this link.');
   if(!curMeta&&j.meta) curMeta=j.meta;
-  cache[key]=j.download; return j.download;
+  cache[key]={...j.download, ts:Date.now()};
+  return cache[key];
 }
 
 // ---- Go / fetch ----
@@ -291,7 +294,7 @@ $('pasteBtn').onclick=async()=>{try{const t=await navigator.clipboard.readText()
 
 // ---- quality selection ----
 function selQ(q){document.querySelectorAll('.qcard').forEach(x=>x.classList.toggle('sel',x.dataset.q===q));$('vDlLabel').textContent='Download '+qLabel(q);}
-function setQSize(q,size){const el=document.querySelector('.qcard[data-q="'+q+'"] small');if(el&&size)el.textContent=fmtSize(size);}
+function setQSize(q,size){const el=document.querySelector('.qcard[data-q="'+q+'"] small');if(!el)return;const s=fmtSize(size);if(s)el.textContent=s;}
 $('qgrid').addEventListener('click',async e=>{
   const b=e.target.closest('.qcard'); if(!b) return; const q=b.dataset.q;
   if(locked(q)){openSheet();return;}

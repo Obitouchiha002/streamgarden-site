@@ -42,7 +42,8 @@ async function tunnelSize(u) {
   try {
     const r = await fetch(u, { method: 'HEAD', signal: AbortSignal.timeout(8000) });
     const s = r.headers.get('content-length') || r.headers.get('estimated-content-length');
-    return s ? Number(s) : null;
+    const n = s ? Number(s) : 0;
+    return n > 0 ? n : null;   // Cobalt sends -1 for "unknown" on some merge jobs — treat as null
   } catch { return null; }
 }
 
