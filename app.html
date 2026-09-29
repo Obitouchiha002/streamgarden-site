@@ -223,7 +223,7 @@
   <button class="ghost" id="closeSheet">Maybe later</button>
 </div></div>
 
-<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 5</span></footer>
+<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 6</span></footer>
 
 <script>
 const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
@@ -273,7 +273,7 @@ async function go(){
     if(thumb){$('thumb').src=thumb;$('thumbBig').src=thumb;$('thumbBox').style.display='block';}else{$('thumbBox').style.display='none';}
     $('mtitle').textContent=(curMeta&&curMeta.title)||'Your video';
     $('mauthor').textContent=(curMeta&&curMeta.author)||'';
-    quality='720';selQ('720');setQSize('720',dl.size);setDirect('video',dl.url);
+    quality='720';selQ('720');setQSize('720',dl.size);setDirect('video');
     switchTab('video');$('result').style.display='block';show('');
     $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
   }catch(e){show('❌ '+(e.message||'Could not fetch this link.'),'err');}
@@ -285,49 +285,39 @@ $('pasteBtn').onclick=async()=>{try{const t=await navigator.clipboard.readText()
 
 function selQ(q){document.querySelectorAll('.qcard').forEach(x=>x.classList.toggle('sel',x.dataset.q===q));$('vDlLabel').textContent='Download '+qLabel(q);}
 function setQSize(q,size){const el=document.querySelector('.qcard[data-q="'+q+'"] small');if(!el)return;const s=fmtSize(size);if(s)el.textContent=s;}
-function setDirect(kind,url){if(kind==='video'){$('vDirectA').href=url;$('vDirect').style.display='block';}else{$('aDirectA').href=url;$('aDirect').style.display='block';}}
+// Everything streams THROUGH our own domain (/api/dl) so it works even when the resolver's own
+// host is blocked (ad-blocker / ISP / region). Same-origin = reliable download AND playback.
+function dlUrl(key,inline){const audio=key==='mp3';return '/api/dl?url='+encodeURIComponent(curUrl)+'&quality='+(audio?'720':key)+(audio?'&audio=1':'')+(inline?'&inline=1':'');}
+function setDirect(kind){if(kind==='audio'){$('aDirectA').href=dlUrl('mp3');$('aDirect').style.display='block';}else{$('vDirectA').href=dlUrl(quality);$('vDirect').style.display='block';}}
 $('qgrid').addEventListener('click',async e=>{
   const b=e.target.closest('.qcard');if(!b)return;const q=b.dataset.q;if(locked(q)){openSheet();return;}
-  quality=q;selQ(q);
-  if(cache[q]){setQSize(q,cache[q].size);setDirect('video',cache[q].url);return;}
+  quality=q;selQ(q);setDirect('video');
+  if(cache[q]){setQSize(q,cache[q].size);return;}
   const el=b.querySelector('small');const old=el.textContent;el.innerHTML='<span class="spin"></span>';
-  try{const dl=await resolveFor(q);el.textContent=fmtSize(dl.size)||old;setDirect('video',dl.url);}catch(err){el.textContent='—';show('❌ '+err.message,'err');}
+  try{const dl=await resolveFor(q);el.textContent=fmtSize(dl.size)||old;}catch(err){el.textContent='—';}
 });
 
 function switchTab(name){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.pane===name));document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='pane-'+name));}
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)switchTab(t.dataset.pane);});
 
-// download: stream the bytes ourselves (CORS is open) with a live %, then save a real Blob.
-async function downloadStream(url,filename,sizeHint,onProg){
-  const r=await fetch(url);if(!r.ok||!r.body)throw new Error('HTTP '+(r.status||'0'));
-  const reader=r.body.getReader();const chunks=[];let got=0;
-  for(;;){const{done,value}=await reader.read();if(done)break;chunks.push(value);got+=value.length;onProg&&onProg(got,sizeHint);}
-  if(got<1)throw new Error('empty');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(chunks));a.download=filename||'video.mp4';
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);return got;
-}
-async function doDownload(key,btn){
+// Same-origin download — the browser's own download manager handles it (reliable, no buffering).
+function triggerDownload(u){const a=document.createElement('a');a.href=u;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),2000);}
+function doDownload(key){
   if(locked(key)){openSheet();return;}
-  btn.disabled=true;const t=btn.querySelector('span')||btn;const old=t.textContent;t.innerHTML='<span class="spin dspin"></span> Preparing…';
-  try{
-    const dl=await resolveFor(key);
-    if(key!=='mp3'){setQSize(key,dl.size);setDirect('video',dl.url);}else{$('aSize').textContent=fmtSize(dl.size)||'ready';setDirect('audio',dl.url);}
-    const got=await downloadStream(dl.url,dl.filename,dl.size,(g,tot)=>{t.innerHTML='<span class="spin dspin"></span> '+pct(g,tot);});
-    show('✅ Saved '+fmtSize(got)+' — check your Downloads folder.','ok');
-  }catch(e){
-    show('⬇️ Auto-download blocked here. Use the <b>Direct link</b> below (tap &amp; hold → Download), or open this page in Chrome.','err');
-  }finally{await wait(400);btn.disabled=false;t.textContent=old;}
+  setDirect(key==='mp3'?'audio':'video');
+  triggerDownload(dlUrl(key));
+  show('⬇️ Download started — it prepares for a few seconds, then saves to your Downloads.','ok');
 }
-$('vDl').onclick=()=>doDownload(quality,$('vDl'));
-$('aDl').onclick=()=>doDownload('mp3',$('aDl'));
+$('vDl').onclick=()=>doDownload(quality);
+$('aDl').onclick=()=>doDownload('mp3');
 
 function playMedia(u,isAudio){$('playerHost').innerHTML=isAudio?'<audio controls autoplay src="'+u+'"></audio>':'<video controls autoplay playsinline src="'+u+'"></video>';$('player').style.display='flex';}
 function closePlayer(){$('playerHost').innerHTML='';$('player').style.display='none';}
 $('playerClose').onclick=closePlayer;$('player').addEventListener('click',e=>{if(e.target===$('player'))closePlayer();});
-async function preparePlay(key,isAudio,btn){if(locked(key)){openSheet();return;}const old=btn.textContent;btn.disabled=true;btn.innerHTML='<span class="spin"></span>';try{const dl=await resolveFor(key);if(key!=='mp3')setDirect('video',dl.url);else setDirect('audio',dl.url);playMedia(dl.url,isAudio);}catch(e){show('❌ '+(e.message||'Could not play'),'err');}finally{btn.disabled=false;btn.textContent=old;}}
-$('vPlay').onclick=()=>preparePlay(quality,false,$('vPlay'));
-$('aPlay').onclick=()=>preparePlay('mp3',true,$('aPlay'));
-$('playThumb').onclick=()=>preparePlay(quality,false,$('vPlay'));
+function preparePlay(key,isAudio){if(locked(key)){openSheet();return;}setDirect(key==='mp3'?'audio':'video');playMedia(dlUrl(key,true),isAudio);}
+$('vPlay').onclick=()=>preparePlay(quality,false);
+$('aPlay').onclick=()=>preparePlay('mp3',true);
+$('playThumb').onclick=()=>preparePlay(quality,false);
 
 $('tDl').onclick=async()=>{const u=(curMeta&&curMeta.thumbnail)||'';if(!u){show('No thumbnail available.','err');return;}
   try{const r=await fetch(u);const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='thumbnail.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);show('✅ Thumbnail downloaded.','ok');}
