@@ -74,10 +74,15 @@
   input[type=url]:focus{border-color:var(--sage)}
   .go{border:0;border-radius:12px;padding:0 18px;font-weight:700;font-size:15px;color:#0d0f08;background:linear-gradient(135deg,#AEC98A,#5A5A40);cursor:pointer}
   .go:disabled{opacity:.6}
-  .quals{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-  .q{position:relative;border:1px solid var(--line);background:var(--fieldbg);color:var(--ink);border-radius:999px;padding:9px 15px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+  .paste{border:1px solid var(--line);background:var(--fieldbg);color:var(--sage);border-radius:12px;padding:0 14px;font-weight:700;font-size:14px;cursor:pointer}
+  .qlabel{font-size:12px;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+  .quals{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .q{display:flex;flex-direction:column;align-items:center;gap:1px;border:1px solid var(--line);background:var(--fieldbg);color:var(--ink);border-radius:14px;padding:10px 4px;cursor:pointer;transition:.15s}
+  .q b{font-size:14px;font-weight:700}
+  .q small{font-size:10px;color:var(--sub)}
   .q.sel{background:linear-gradient(135deg,#8B9B6A,#5A5A40);color:#0d0f08;border-color:transparent}
-  .q .lk{font-size:11px;opacity:.7;margin-left:4px}
+  .q.sel small{color:#0d0f08;opacity:.7}
+  @media(max-width:420px){.quals{grid-template-columns:repeat(3,1fr)}}
   .dl{margin-top:16px;width:100%;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:16px;color:#0d0f08;background:linear-gradient(135deg,#E8C766,#C9982E);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
   .dl:disabled{opacity:.6}
   .out{margin-top:12px;font-size:14px;text-align:center;min-height:20px}
@@ -123,15 +128,17 @@
   <div class="tool">
     <div class="inrow">
       <input id="url" type="url" inputmode="url" autocomplete="off" placeholder="Paste video link here…" />
+      <button class="paste" id="pasteBtn" title="Paste from clipboard">Paste</button>
       <button class="go" id="goBtn">Go</button>
     </div>
 
+    <div class="qlabel">Choose quality</div>
     <div class="quals" id="quals">
-      <button class="q" data-q="360">360p</button>
-      <button class="q sel" data-q="720">720p</button>
-      <button class="q" data-q="1080">1080p</button>
-      <button class="q" data-q="max">4K</button>
-      <button class="q" data-q="mp3">MP3</button>
+      <button class="q" data-q="360"><b>360p</b><small>small</small></button>
+      <button class="q sel" data-q="720"><b>720p</b><small>HD</small></button>
+      <button class="q" data-q="1080"><b>1080p</b><small>Full HD</small></button>
+      <button class="q" data-q="max"><b>4K</b><small>Ultra</small></button>
+      <button class="q" data-q="mp3"><b>MP3</b><small>audio</small></button>
     </div>
 
     <div class="preview" id="preview"><img id="pvImg" alt="" /><div><b id="pvTitle"></b></div></div>
@@ -255,33 +262,36 @@ async function resolve(){
 }
 $('goBtn').onclick=resolve;
 $('url').addEventListener('keydown',e=>{if(e.key==='Enter')resolve();});
+$('pasteBtn').onclick=async()=>{
+  try{ const t=await navigator.clipboard.readText(); if(t){ $('url').value=t.trim(); resolve(); } }
+  catch(e){ $('url').focus(); show('Long-press the box and tap Paste.','err'); }
+};
 
-async function saveFile(u,name){
-  try{
-    const r=await fetch(u); if(!r.ok) throw 0;
-    const b=await r.blob();
-    const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name||'video.mp4';
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-  }catch(e){
-    const a=document.createElement('a');a.href=u;a.download=name||'';a.target='_blank';
-    document.body.appendChild(a);a.click();a.remove();
-  }
+// The tunnel URL is cross-origin, streamed (no content-length), and already carries
+// Content-Disposition: attachment. So we must NOT fetch it into a blob (that buffers the whole
+// video in memory and hangs/crashes phones on big files) — just point the browser at it and the
+// attachment header makes it download straight to disk, without leaving the page.
+function saveFile(u){
+  const a=document.createElement('a');
+  a.href=u; a.style.display='none';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>a.remove(),1000);
 }
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
 $('dlBtn').onclick=async()=>{
   if(!lastResolve){resolve();return;}
   $('dlBtn').disabled=true;
-  const lbl=$('dlLabel').textContent;$('dlLabel').innerHTML='<span class="spin"></span> Downloading…';
+  const lbl=$('dlLabel').textContent;$('dlLabel').innerHTML='<span class="spin"></span> Starting…';
   try{
     if(lastResolve.picker){
-      for(let i=0;i<lastResolve.picker.length;i++){await saveFile(lastResolve.picker[i].url,'item-'+(i+1));}
+      for(let i=0;i<lastResolve.picker.length;i++){ saveFile(lastResolve.picker[i].url); await wait(700); }
     }else{
-      await saveFile(lastResolve.url,lastResolve.filename);
+      saveFile(lastResolve.url);
     }
-    show('✅ Download started — check your files.','ok');
+    show('✅ Download started — check your notifications / Downloads folder.','ok');
   }catch(e){show('Download failed — try again or a lower quality.','err');}
-  finally{$('dlBtn').disabled=false;$('dlLabel').textContent=lbl;}
+  finally{ await wait(600); $('dlBtn').disabled=false;$('dlLabel').textContent=lbl; }
 };
 </script>
 </body>
