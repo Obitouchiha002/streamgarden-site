@@ -312,16 +312,39 @@ function switchTab(name){
 }
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(t)switchTab(t.dataset.pane);});
 
-// ---- download (stream via attachment; no memory buffering) ----
-function saveFile(u){const a=document.createElement('a');a.href=u;a.style.display='none';document.body.appendChild(a);a.click();setTimeout(()=>a.remove(),1000);}
+// ---- download ----
+// The tunnel is cross-origin, streamed and carries NO Content-Length, so a plain anchor click
+// makes some phone browsers finalise the file at 0 bytes. Instead we fetch it (CORS is open) and
+// stream the bytes ourselves with a live % — that yields the real file and visible progress.
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const pct=(got,total)=>total>0?Math.min(100,Math.round(got/total*100))+'%':fmtSize(got);
+
+async function downloadStream(url,filename,sizeHint,onProg){
+  const r=await fetch(url);
+  if(!r.ok||!r.body) throw new Error('HTTP '+(r.status||'0'));
+  const reader=r.body.getReader(); const chunks=[]; let got=0;
+  for(;;){ const {done,value}=await reader.read(); if(done)break; chunks.push(value); got+=value.length; onProg&&onProg(got,sizeHint); }
+  if(got<1) throw new Error('empty');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(chunks)); a.download=filename||'video.mp4';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+  return got;
+}
+
 async function doDownload(key,btn,label){
   if(locked(key)){openSheet();return;}
-  btn.disabled=true; const t=btn.querySelector('span')||btn; const old=t.textContent;
+  btn.disabled=true; const t=btn.querySelector('span')||btn; const old=label||t.textContent;
   t.innerHTML='<span class="spin dspin"></span> Preparing…';
-  try{const dl=await resolveFor(key); saveFile(dl.url); if(key!=='mp3')setQSize(key,dl.size); if(key==='mp3')$('aSize').textContent=fmtSize(dl.size)||'ready'; show('✅ Download started — check your notifications / Downloads.','ok');}
-  catch(e){show('❌ '+(e.message||'Download failed'),'err');}
-  finally{await wait(500);btn.disabled=false;t.textContent=old||label;}
+  try{
+    const dl=await resolveFor(key);
+    if(key!=='mp3')setQSize(key,dl.size); else $('aSize').textContent=fmtSize(dl.size)||'ready';
+    const got=await downloadStream(dl.url,dl.filename,dl.size,(g,tot)=>{t.innerHTML='<span class="spin dspin"></span> '+pct(g,tot);});
+    show('✅ Saved '+fmtSize(got)+' — check your Downloads folder.','ok');
+  }catch(e){
+    // Last resort: open the link so the browser's own downloader can try.
+    try{ if(cache[key]) window.open(cache[key].url,'_blank'); }catch(_){}
+    show('Trying in a new tab — if it plays, tap ⋮ → Download. ('+(e.message||'error')+')','err');
+  }
+  finally{ await wait(400); btn.disabled=false; t.textContent=old; }
 }
 $('vDl').onclick=()=>doDownload(quality,$('vDl'));
 $('aDl').onclick=()=>doDownload('mp3',$('aDl'),'Download MP3');
