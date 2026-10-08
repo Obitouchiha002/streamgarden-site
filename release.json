@@ -1,6 +1,6 @@
 {
-  "version": "2.36",
-  "notes": "New in-app Help and feedback, and a much stronger admin panel with analytics, user management and security.",
-  "sizeBytes": 8743577,
+  "version": "2.37",
+  "notes": "Admin can now change the admin passphrase from the Security tab.",
+  "sizeBytes": 8744062,
   "apkUrl": "https://streamgd.lzworth.in/StreamGarden.apk"
 }
