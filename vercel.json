@@ -12,6 +12,10 @@
       "headers": [ { "key": "Cache-Control", "value": "no-store, max-age=0" } ]
     },
     {
+      "source": "/release.json",
+      "headers": [ { "key": "Cache-Control", "value": "no-store, max-age=0" } ]
+    },
+    {
       "source": "/app",
       "headers": [ { "key": "Cache-Control", "value": "no-store, max-age=0" } ]
     },
