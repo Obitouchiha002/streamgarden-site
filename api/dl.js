@@ -35,7 +35,18 @@ async function resolveTunnel(url, quality, audio) {
   return null;
 }
 
+// Other websites must not use this proxy as their free download backend (it streams MBs per
+// request on our bill). They'd send their own Origin/Referer, so reject foreign ones. Requests with
+// neither (privacy browsers, direct opens) still pass — this stops hotlinking, not determined curl.
+function foreign(req) {
+  const o = req.headers.origin || req.headers.referer || '';
+  if (!o) return false;
+  try { const h = new URL(o).hostname; return !(h === 'streamgd.lzworth.in' || h === 'localhost' || h.endsWith('.vercel.app')); }
+  catch { return false; }
+}
+
 export default async function handler(req, res) {
+  if (foreign(req)) return res.status(403).json({ error: 'Not allowed' });
   const q = req.query || {};
   const url = String(q.url || '');
   const audio = String(q.audio || '') === '1';

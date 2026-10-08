@@ -424,5 +424,16 @@
      clean format shows a small native-style banner that takes no layout space and never blocks
      or interrupts the user (no popunder, no fullscreen, no push spam). -->
 <script>(function(s){s.dataset.zone='11797029',s.src='https://nap5k.com/tag.min.js'})([document.documentElement,document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+<!-- Cookie notice: this page carries an ad partner that uses cookies, so tell visitors once. -->
+<div id="ck" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;max-width:560px;margin:auto;background:#12170c;border:1px solid rgba(255,255,255,.14);color:#D4DCC8;border-radius:16px;padding:12px 14px;font:13.5px/1.5 system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;align-items:center;gap:12px">
+  <span style="flex:1">We use cookies to show ads that keep StreamGarden free. See our <a href="/privacy.html" style="color:#AEC98A">Privacy Policy</a>.</span>
+  <button id="ckOk" style="border:0;border-radius:999px;padding:8px 18px;font-weight:800;background:#AEC98A;color:#0d0f08;cursor:pointer">OK</button>
+</div>
+<script>
+(function(){var k='sg_cookie_ok';try{if(localStorage.getItem(k))return}catch(e){}
+  var b=document.getElementById('ck');b.style.display='flex';
+  document.getElementById('ckOk').onclick=function(){try{localStorage.setItem(k,'1')}catch(e){}b.style.display='none'};})();
+</script>
 </body>
 </html>
