@@ -1,6 +1,6 @@
 {
-  "version": "2.34",
-  "notes": "Updates now arrive automatically inside the app — you will see what is new and the download size, then one tap installs it.",
-  "sizeBytes": 8739370,
+  "version": "2.35",
+  "notes": "Fixes the admin panel error when giving premium, and the admin passphrase now ignores a stray space.",
+  "sizeBytes": 8739411,
   "apkUrl": "https://streamgd.lzworth.in/StreamGarden.apk"
 }
