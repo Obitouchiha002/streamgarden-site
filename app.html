@@ -86,6 +86,20 @@
   .arow{border:1px solid var(--line);background:var(--fieldbg);border-radius:14px;padding:16px}
   .arow b{font-size:15px}.arow small{color:var(--sub);font-size:12px;display:block;margin-top:2px}
   .thumbdl{text-align:center}
+  .ys-score{display:flex;align-items:center;gap:12px;margin-bottom:6px;color:var(--sub);font-size:13px}
+  .ys-ring{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#0d0f08;background:linear-gradient(135deg,#AEC98A,#5A5A40)}
+  .ys-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+  @media(max-width:440px){.ys-stats{grid-template-columns:repeat(2,1fr)}}
+  .ys-stat{background:var(--fieldbg);border:1px solid var(--line);border-radius:12px;padding:9px 11px;min-width:0}
+  .ys-stat small{display:block;color:var(--sub);font-size:11px}
+  .ys-stat b{font-size:13.5px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ys-h{font-size:13px;font-weight:800;color:var(--sage);margin:16px 0 7px;display:flex;justify-content:space-between;align-items:center}
+  .ys-tags{display:flex;flex-wrap:wrap;gap:6px}
+  .ys-tag{background:var(--fieldbg);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12.5px;cursor:pointer}
+  .ys-tag:hover{border-color:var(--sage)}
+  .ys-copy{border:1px solid var(--line);background:transparent;color:var(--sage);border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:700;cursor:pointer}
+  .ys-check{font-size:13px;padding:3px 0;color:#C6D0B8}
+  .ys-desc{white-space:pre-wrap;font-size:13px;color:#C6D0B8;background:var(--fieldbg);border:1px solid var(--line);border-radius:12px;padding:12px;max-height:240px;overflow:auto}
   .thumbdl img{width:100%;max-width:420px;border-radius:12px;margin:0 auto 12px;display:block}
   .actions{display:flex;gap:8px;margin-top:14px}
   .btn{flex:1;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -165,6 +179,7 @@
         <button class="tab on" data-pane="video">🎬 Video</button>
         <button class="tab" data-pane="audio">🎵 Audio</button>
         <button class="tab" data-pane="thumb">🖼️ Thumbnail</button>
+        <button class="tab" data-pane="seo" id="seoTab">📈 SEO</button>
       </div>
 
       <div class="pane on" id="pane-video">
@@ -195,6 +210,8 @@
         <button class="btn dl" id="tDl" style="width:100%">Download thumbnail</button>
       </div>
 
+      <div class="pane" id="pane-seo"><div id="seoBody"></div></div>
+
       <p class="note">100% free · For your own personal use — please respect copyright.</p>
     </div>
   </div>
@@ -223,7 +240,7 @@
   <button class="ghost" id="closeSheet">Maybe later</button>
 </div></div>
 
-<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 7</span></footer>
+<footer>© 2026 StreamGarden · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a> · <a href="/refund.html">Refunds</a> · <a href="/contact.html">Contact</a> · <span style="opacity:.5">build 8</span></footer>
 
 <script>
 const SUPA='https://befdjbbzuyzjlyrckkxj.supabase.co';
@@ -274,7 +291,7 @@ async function go(){
     $('mtitle').textContent=(curMeta&&curMeta.title)||'Your video';
     $('mauthor').textContent=(curMeta&&curMeta.author)||'';
     quality='720';selQ('720');setQSize('720',dl.size);setDirect('video');
-    switchTab('video');$('result').style.display='block';show('');
+    switchTab('video');$('result').style.display='block';show('');loadSeo(url);
     $('result').scrollIntoView({behavior:'smooth',block:'nearest'});
   }catch(e){show('❌ '+(e.message||'Could not fetch this link.'),'err');}
   finally{$('goBtn').disabled=false;}
@@ -334,6 +351,38 @@ $('playThumb').onclick=()=>preparePlay(quality,false);
 $('tDl').onclick=async()=>{const u=(curMeta&&curMeta.thumbnail)||'';if(!u){show('No thumbnail available.','err');return;}
   try{const r=await fetch(u);const b=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='thumbnail.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),3000);show('✅ Thumbnail downloaded.','ok');}
   catch(e){window.open(u,'_blank');show('Opened image — long-press to save.','ok');}};
+
+// ---- YouTube SEO: tags, keywords, checklist. Tags/description are written by the uploader, so
+// everything is rendered with textContent — never innerHTML — to rule out script injection.
+const mk=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;};
+const isYT=u=>/(^|\.|\/)(youtube\.com|youtu\.be)\//i.test(u);
+const fmtDur=s=>{s=+s||0;const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return(h?h+':'+String(m).padStart(2,'0'):m)+':'+String(x).padStart(2,'0');};
+function copyText(t,btn){navigator.clipboard.writeText(t).then(()=>{const o=btn.textContent;btn.textContent='Copied ✓';setTimeout(()=>btn.textContent=o,1200);}).catch(()=>{});}
+async function loadSeo(url){
+  const body=$('seoBody');$('seoTab').style.display=isYT(url)?'':'none';
+  if(!isYT(url))return;
+  body.replaceChildren(mk('p','note','Loading SEO details…'));
+  try{
+    const j=await(await fetch('/api/seo?url='+encodeURIComponent(url))).json();
+    if(!j.ok){body.replaceChildren(mk('p','note',j.error||'No SEO details.'));return;}
+    body.replaceChildren();
+    const sc=mk('div','ys-score');sc.append(mk('div','ys-ring',String(j.score)),mk('div',null,'SEO score / 100'));body.append(sc);
+    const st=mk('div','ys-stats');
+    [['Views',(j.views||0).toLocaleString('en-IN')],['Duration',fmtDur(j.duration)],['Channel',j.channel||'—'],['Published',j.publishDate||'—'],['Category',j.category||'—'],['Tags',j.tags.length+' · '+j.tagChars+'/500']]
+      .forEach(([k,v])=>{const s=mk('div','ys-stat');s.append(mk('small',null,k),mk('b',null,String(v)));st.append(s);});
+    body.append(st);
+    const th=mk('div','ys-h');th.append(mk('span',null,'🏷️ Tags ('+j.tags.length+')'));
+    if(j.tags.length){const cb=mk('button','ys-copy','Copy all');cb.onclick=()=>copyText(j.tags.join(', '),cb);th.append(cb);}
+    const tw=mk('div','ys-tags');
+    if(j.tags.length)j.tags.forEach(t=>{const c=mk('span','ys-tag',t);c.title='Tap to copy';c.onclick=()=>copyText(t,c);tw.append(c);});
+    else tw.append(mk('span','ys-check','This video has no tags.'));
+    body.append(th,tw);
+    if(j.hashtags.length){const hw=mk('div','ys-tags');j.hashtags.forEach(h=>hw.append(mk('span','ys-tag',h)));body.append(mk('div','ys-h','# Hashtags'),hw);}
+    const kw=mk('div','ys-tags');j.keywords.forEach(k=>kw.append(mk('span','ys-tag',k.word+' ×'+k.count)));body.append(mk('div','ys-h','🔑 Top keywords'),kw);
+    body.append(mk('div','ys-h','✅ SEO checklist'));j.checks.forEach(c=>body.append(mk('div','ys-check',(c.ok?'✅ ':'⚠️ ')+c.label)));
+    if(j.description){const dh=mk('div','ys-h');dh.append(mk('span',null,'📝 Description'));const db=mk('button','ys-copy','Copy');db.onclick=()=>copyText(j.description,db);dh.append(db);body.append(dh,mk('div','ys-desc',j.description));}
+  }catch(e){body.replaceChildren(mk('p','note','Could not load SEO details.'));}
+}
 </script>
 </body>
 </html>
