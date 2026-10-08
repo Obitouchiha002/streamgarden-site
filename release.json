@@ -1,6 +1,6 @@
 {
-  "version": "2.35",
-  "notes": "Fixes the admin panel error when giving premium, and the admin passphrase now ignores a stray space.",
-  "sizeBytes": 8739411,
+  "version": "2.36",
+  "notes": "New in-app Help and feedback, and a much stronger admin panel with analytics, user management and security.",
+  "sizeBytes": 8743577,
   "apkUrl": "https://streamgd.lzworth.in/StreamGarden.apk"
 }
