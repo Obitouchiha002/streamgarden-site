@@ -1,6 +1,6 @@
 {
-  "version": "2.37",
-  "notes": "Admin can now change the admin passphrase from the Security tab.",
-  "sizeBytes": 8744069,
+  "version": "2.38",
+  "notes": "Admin unlocks with a short PIN again (number keypad), protected by a lockout.",
+  "sizeBytes": 8744098,
   "apkUrl": "https://streamgd.lzworth.in/StreamGarden.apk"
 }
