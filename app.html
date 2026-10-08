@@ -368,8 +368,9 @@ async function loadSeo(url){
     body.replaceChildren();
     const sc=mk('div','ys-score');sc.append(mk('div','ys-ring',String(j.score)),mk('div',null,'SEO score / 100'));body.append(sc);
     const st=mk('div','ys-stats');
-    [['Views',(j.views||0).toLocaleString('en-IN')],['Duration',fmtDur(j.duration)],['Channel',j.channel||'—'],['Published',j.publishDate||'—'],['Category',j.category||'—'],['Tags',j.tags.length+' · '+j.tagChars+'/500']]
-      .forEach(([k,v])=>{const s=mk('div','ys-stat');s.append(mk('small',null,k),mk('b',null,String(v)));st.append(s);});
+    const n=x=>x==null?null:Number(x).toLocaleString('en-IN');
+    [['Views',n(j.views)],['Likes',n(j.likes)],['Comments',n(j.comments)],['Duration',fmtDur(j.duration)],['Channel',j.channel||'—'],['Published',j.publishDate||'—'],['Category',j.category||'—'],['Tags',j.tags.length+' · '+j.tagChars+'/500']]
+      .filter(([,v])=>v!=null).forEach(([k,v])=>{const s=mk('div','ys-stat');s.append(mk('small',null,k),mk('b',null,String(v)));st.append(s);});
     body.append(st);
     const th=mk('div','ys-h');th.append(mk('span',null,'🏷️ Tags ('+j.tags.length+')'));
     if(j.tags.length){const cb=mk('button','ys-copy','Copy all');cb.onclick=()=>copyText(j.tags.join(', '),cb);th.append(cb);}
